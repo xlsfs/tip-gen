@@ -71,13 +71,13 @@ const StyledButton = styled('button')`
   font-family: IBM Plex Sans, sans-serif;
   font-size: 0.875rem;
   box-sizing: border-box;
-  min-height: calc(1.5em + 22px);
+  min-height: calc(1.5em);
   //min-width: 480px;
   background: #fff;
   border: 1px solid #ccc;
-  border-radius: 0.75em;
+  //border-radius: 0.75em;
   margin: 0.5em;
-  padding: 10px;
+  //padding: 10px;
   text-align: left;
   line-height: 1.5;
   color: #000;
@@ -87,7 +87,7 @@ const StyledButton = styled('button')`
   }
 
   &.${selectUnstyledClasses.expanded} {
-    border-radius: 0.75em 0.75em 0 0;
+    //border-radius: 0.75em 0.75em 0 0;
 
     &::after {
       content: '▴';
