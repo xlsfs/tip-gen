@@ -8,13 +8,21 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@mui/icons-material": "^5.3.1",
+    "@mui/material": "^5.4.0",
+    "@svgdotjs/svg.js": "^3.1.2",
+    "exceljs": "^4.3.0",
     "next": "12.0.9",
     "react": "17.0.2",
+    "react-color": "^2.19.3",
     "react-dom": "17.0.2"
   },
   "devDependencies": {
     "@types/node": "17.0.13",
     "@types/react": "17.0.38",
+    "@types/react-color": "^3.0.6",
     "eslint": "8.8.0",
     "eslint-config-next": "12.0.9",
     "typescript": "4.5.5"
