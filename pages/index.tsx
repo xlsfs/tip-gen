@@ -86,7 +86,6 @@ const Home: NextPage = () => {
         </Grid>
       </div>
       <div className={styles.container_right}>
-        <Button variant="contained">right</Button>
         <div>
           <span>属性</span>
           <PropertyList></PropertyList>
