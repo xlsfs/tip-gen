@@ -57,6 +57,7 @@ export class ImageObj extends _baseObj {
         // };
     }
 
+
     // loadedImageComplete() {
 
     // // this.image.width;

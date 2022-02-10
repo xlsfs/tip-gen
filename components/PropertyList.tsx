@@ -53,7 +53,7 @@ export default class PropertyList extends React.Component {
             this.setState({layerList: [...SceneControls.getIns().selected]});
             this.changeSelProperty();
         }, Basic.EventObj_resetSelectList);
-
+``
         EventMgr.getIns().removeByCaller(EventEnum.resetSelectList_layer2scene, Basic.EventObj_resetSelectList);
         EventMgr.getIns().add(EventEnum.resetSelectList_layer2scene, () => {
             this.setState({layerList: [...SceneControls.getIns().selected]});
@@ -146,9 +146,12 @@ export default class PropertyList extends React.Component {
                 for (let i = 0; i < objects.length; i++) {
                     let item = objects[i];
                     if (item instanceof TextObj) {
-                        item.svgItem.plain(textItem.value);
+                        item.setText(textItem.value);
                     }
                 }
+                setTimeout(()=>{
+                    EventMgr.getIns().dispatchEvent(EventEnum.resetLayerList);
+                },0);
             } else if (type == PropertyTypeEnum.txt_family) {
                 chaProp.height = parseFloat(textItem.value) - (selItem.svgItem.height() as number);
                 for (let i = 0; i < objects.length; i++) {
@@ -224,7 +227,7 @@ export default class PropertyList extends React.Component {
         return (<>
             {//未选择元素
                 this.state.layerList.length == 0 &&
-                <p>请先选则元素</p>
+                <p>请先选择元素</p>
             }
             {//位置
                 this.state.layerList.length > 0 &&

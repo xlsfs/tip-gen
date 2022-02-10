@@ -26,8 +26,8 @@ export class _baseObj  {
         this.isBaseObj = true;
     }
 
-    setLayer(idx:number) {
-        
+    remove() {
+        this.svgItem.remove();
     }
 
     // getSel() { }

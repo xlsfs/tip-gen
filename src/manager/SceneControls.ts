@@ -2,8 +2,6 @@ import { SVG, Svg, Rect, extend as SVGextend, Element as SVGElement, G } from '@
 import { EventEnum } from '../events/EventEnum';
 import { _baseObj } from "../object/_baseObj";
 import { EventMgr } from './EventMgr';
-import { ObjectMgr } from "./ObjectMgr";
-import { OrbitControls } from "./OrbitControls";
 
 export class SceneControls {
 
@@ -38,10 +36,7 @@ export class SceneControls {
     }
 
     public selected: _baseObj[] = [];
-    private controls: OrbitControls
 
-    // private mouse:Vector2;
-    // private raycaster:Raycaster;
     constructor() {
 
     }
@@ -164,7 +159,7 @@ export class SceneControls {
 
         if (isDownObj && this.selected.length > 0) {//拖动对象
         } else {//拖动舞台
-            var isChangSelect = false;
+            let isChangSelect = false;
             this.resize();
             let target: any = event.target;
             if (target && target.isBaseObj) {
@@ -179,6 +174,7 @@ export class SceneControls {
                         selItem.setSel(true);
                         this.selected.push(selItem);
                     }
+                    isChangSelect = true;
                 } else {
                     if (this.selected.length == 1) {
                         let selIdx = this.selected.indexOf(selItem);

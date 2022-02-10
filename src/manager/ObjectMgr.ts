@@ -54,7 +54,7 @@ export class ObjectMgr {
         for (let i = 0; i < this.objList.length; i++) {
             let item = this.objList[i];
             sceneControls.view.node.appendChild(item.svgItem.node);
-            item.setLayer((_y + _gap) * i);
+            // item.setLayer((_y + _gap) * i);
         }
         EventMgr.getIns().dispatchEvent(EventEnum.resetLayerList);
     }
