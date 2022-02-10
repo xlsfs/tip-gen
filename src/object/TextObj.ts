@@ -43,4 +43,9 @@ export class TextObj extends _baseObj {
 
     }
 
+    setText(val:string) {
+        this.svgItem.plain(val);
+        this.layerName = val;
+    }
+
 }

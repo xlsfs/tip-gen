@@ -72,53 +72,27 @@ const Home: NextPage = () => {
         >
           <Grid item>
             <input type="file" id="btn_loadImgFile" style={{ display: "none" }} accept="image/png, image/jpeg" />
-            <Button variant="contained" onClick={() => {
+            <Button variant="contained" size="small" onClick={() => {
               let fileInput = document.getElementById("btn_loadImgFile");
               fileInput.click();
             }}>加载图片</Button>
           </Grid>
           <Grid item>
-            <Button variant="contained" onClick={() => {
+            <Button variant="contained" size="small" onClick={() => {
               createNewText();
             }}>新建文本</Button>
           </Grid>
 
         </Grid>
       </div>
-      <div className={styles.container_right}>
+      <div className={styles.container_right_top}>
         <div>
           <span>属性</span>
           <PropertyList></PropertyList>
         </div>
-        <Divider />
+      </div>
+      <div className={styles.container_right_bottom}>
         <div>
-          <span>图层</span>
-          <Grid
-            container
-            direction="row"
-            justifyContent="flex-start"
-            alignItems="flex-start"
-            spacing={1}
-            p={1}>
-            <Grid item>
-              <IconButton>
-                <KeyboardDoubleArrowUpIcon />
-              </IconButton>
-              <IconButton>
-                <KeyboardArrowUpIcon />
-              </IconButton>
-              <IconButton>
-                <KeyboardArrowDownIcon />
-              </IconButton>
-              <IconButton>
-                <KeyboardDoubleArrowDownIcon />
-              </IconButton>
-              <IconButton>
-                <DeleteIcon />
-              </IconButton>
-            </Grid>
-          </Grid>
-
           <LayerList>
           </LayerList>
         </div>
