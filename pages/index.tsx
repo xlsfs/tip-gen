@@ -9,16 +9,9 @@ import { EventEnum } from '../src/events/EventEnum'
 import Button from '@mui/material/Button';
 import Slider from '@mui/material/Slider';
 import Grid from '@mui/material/Grid';
-import Divider from '@mui/material/Divider';
 import { ObjectMgr } from '../src/manager/ObjectMgr'
 import LayerList from '../components/LayerList'
 import PropertyList from '../components/PropertyList'
-import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
-import DeleteIcon from '@mui/icons-material/Delete';
-import IconButton from '@mui/material/IconButton';
 
 const Home: NextPage = () => {
   useEffect(() => {

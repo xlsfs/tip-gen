@@ -24,7 +24,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 // export default function LayerList(props: any) {
 export default class LayerList extends React.Component {
 
-    handleListItemClick: Function;
     state: any;
 
     constructor(props: any) {
@@ -38,14 +37,6 @@ export default class LayerList extends React.Component {
         // const [layerList, setLayerList] = React.useState([...ObjectMgr.getIns().objList]);
         // const [selectedIndex, setSelectedIndex] = React.useState(null);
 
-        this.handleListItemClick = (
-            event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-            item: any,
-        ) => {
-            this.setState({selectedItem: [item]});
-            EventMgr.getIns().dispatchEvent(EventEnum.resetSelectList_layer2scene, [[item]]);
-            // setSelectedIndex(item);
-        };
         EventMgr.getIns().removeByCaller(EventEnum.resetLayerList, Basic.EventObj_LayerList);
         EventMgr.getIns().add(EventEnum.resetLayerList, () => {
             // this.setState({layerList: []});
@@ -60,6 +51,26 @@ export default class LayerList extends React.Component {
         }, Basic.EventObj_LayerList);
     }
 
+    handleListItemClick(
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+        item: any,
+    ) {
+        if(event.shiftKey && this.state.selectedItem.length > 0) {//多选
+            let selIdx = this.state.selectedItem.indexOf(item);
+            if(selIdx === -1) {
+                this.state.selectedItem.push(item);
+            } else {
+                this.state.selectedItem.splice(selIdx, 1);
+            }
+            this.setState({selectedItem: [...this.state.selectedItem]});
+            EventMgr.getIns().dispatchEvent(EventEnum.resetSelectList_layer2scene, [[...this.state.selectedItem]]);
+        } else {
+            this.setState({selectedItem: [item]});
+            EventMgr.getIns().dispatchEvent(EventEnum.resetSelectList_layer2scene, [[item]]);
+        }
+        // setSelectedIndex(item);
+    }
+
     //移动到最底层
     goBottom() {
         let objList = ObjectMgr.getIns().objList;
@@ -69,7 +80,6 @@ export default class LayerList extends React.Component {
             let selItem = selected[i];
             let selItemIdx = objList.indexOf(selItem);
             if (selItemIdx != -1) {
-                objList.splice(selItemIdx, 1);
                 selArr.push({idx: selItemIdx, item: selItem});
             }
         }
@@ -78,6 +88,8 @@ export default class LayerList extends React.Component {
             return idx;
         });
         for (let i = 0; i < selArr.length; i++) {
+            let selItemIdx = objList.indexOf(selArr[i].item);
+            objList.splice(selItemIdx, 1);
             objList.unshift(selArr[i].item)
         }
         ObjectMgr.getIns().resetLayer();
@@ -153,7 +165,6 @@ export default class LayerList extends React.Component {
             let selItem = selected[i];
             let selItemIdx = objList.indexOf(selItem);
             if (selItemIdx != -1) {
-                objList.splice(selItemIdx, 1);
                 selArr.push({idx: selItemIdx, item: selItem});
             }
         }
@@ -162,6 +173,8 @@ export default class LayerList extends React.Component {
             return idx;
         });
         for (let i = 0; i < selArr.length; i++) {
+            let selItemIdx = objList.indexOf(selArr[i].item);
+            objList.splice(selItemIdx, 1);
             objList.push(selArr[i].item)
         }
         ObjectMgr.getIns().resetLayer();
@@ -202,8 +215,8 @@ export default class LayerList extends React.Component {
                         pointerEvents: this.state.selectedItem.length == 0 ? "none" : "auto"
                     }}>
                         <IconButton
-                            color={this.state.selectedItem.length == 0?"#eeeeee":"#42a5f5"}
-                            disabled={this.state.selectedItem.length == 0}
+                            // color={this.state.selectedItem.length == 0?"#eeeeee":"#42a5f5"}
+                            disabled={this.state.selectedItem.length == 0 || this.state.layerList.length < 2}
                             onClick={(event) => {
                                 //移动到最顶层
                                 this.goTop();
@@ -211,7 +224,7 @@ export default class LayerList extends React.Component {
                             <KeyboardDoubleArrowUpIcon/>
                         </IconButton>
                         <IconButton
-                            disabled={this.state.selectedItem.length == 0}
+                            disabled={this.state.selectedItem.length == 0 || this.state.layerList.length < 2}
                             onClick={(event) => {
                                 //向上一层
                                 this.goUp();
@@ -219,7 +232,7 @@ export default class LayerList extends React.Component {
                             <KeyboardArrowUpIcon/>
                         </IconButton>
                         <IconButton
-                            disabled={this.state.selectedItem.length == 0}
+                            disabled={this.state.selectedItem.length == 0 || this.state.layerList.length < 2}
                             onClick={(event) => {
                                 //向下一层
                                 this.goDown();
@@ -227,7 +240,7 @@ export default class LayerList extends React.Component {
                             <KeyboardArrowDownIcon/>
                         </IconButton>
                         <IconButton
-                            disabled={this.state.selectedItem.length == 0}
+                            disabled={this.state.selectedItem.length == 0 || this.state.layerList.length < 2}
                             onClick={(event) => {
                                 //移动到最底层
                                 this.goBottom();
