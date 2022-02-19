@@ -40,7 +40,7 @@ export class EventDispatcher {
      * @param caller
      * @param args
      */
-    addOnce(type, func, caller = null, args = null) {
+    addOnce(type:string, func:Function, caller:any = null, args:any = null) {
         this.add(type, func, caller, args, true);
     }
 
@@ -79,7 +79,7 @@ export class EventDispatcher {
         }
     }
 
-    removeAll(type) {
+    removeAll(type:string) {
         let list = this.eventDict[type];
         if (list) {
             for (let i = 0; i < list.length; i++) {
@@ -93,7 +93,7 @@ export class EventDispatcher {
         }
     }
 
-    dispatchEvent(type, param?) {// type:"",param:{}
+    dispatchEvent(type:string, param?:any) {// type:"",param:{}
         let list = this.eventDict[type];
         if (list) {
             for (let i = 0; i < list.length; i++) {
@@ -113,12 +113,12 @@ export class EventDispatcher {
      * @param {array} param
      * @returns {null|*}
      */
-    run(item, param) {
+    run(item:any, param:any) {
         let method = item.func;
         let caller = item.caller;
         let args = item.args;
         if (method == null) return null;
-        var result;
+        let result;
         if (!param) {//没有参数直接调用回调
             result = method.apply(caller, args);
         } else if (!args && !param.unshift) {

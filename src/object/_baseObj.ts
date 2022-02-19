@@ -39,4 +39,8 @@ export class _baseObj  {
             this.svgItem.node.style.outline = null;
         }
     }
+
+    genOutData() {
+
+    }
 }

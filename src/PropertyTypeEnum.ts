@@ -1,4 +1,11 @@
 export const PropertyTypeEnum = {
+
+    scene_width: 'scene_width',
+    scene_height: 'scene_height',
+    out_scale: 'out_scale',
+
+
+
     pos_x: "pos_x",
     pos_y: "pos_y",
 

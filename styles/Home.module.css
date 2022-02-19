@@ -4,31 +4,76 @@
   height: 100%;
   pointer-events: none;
 }
+.container_top {
+  position: absolute;
+  width: 100%;
+  height: 40px;
+  background-color: #9dff84;
+  z-index: 10;
+}
 .container_left {
   position: absolute;
-  left: 0px;
+  left: 0;
+  top: 40px;
   width: 120px;
   background-color: #76b6ff;
 }
 .container_right_top {
   position: absolute;
-  right: 0px;
+  right: 0;
+  top: 40px;
   width: 220px;
   background-color: #9dff84;
 }
 .container_right_bottom {
   position: absolute;
-  right: 0px;
-  bottom: 0px;
+  right: 0;
+  bottom: 0;
   width: 220px;
   background-color: #9dff84;
 }
 .container_bottom {
   position: absolute;
-  bottom: 0px;
+  bottom: 0;
   width: 100%;
   height: 25px;
   box-sizing: content-box;
+}
+.alert_container_show {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+.alert_container_hide{
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+.alert_importExcel_show {
+  display: block;
+  position: absolute;
+  width: 400px;
+  height: 600px;
+  background-color: rgb(255, 245, 169);
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+}
+.alert_importExcel_hide{
+  display: none;
+  position: absolute;
+  width: 400px;
+  height: 600px;
+  background-color: rgb(255, 245, 169);
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
 }
 
 .main {

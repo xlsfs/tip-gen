@@ -46,6 +46,9 @@ export default class PropertyList extends React.Component {
             prop_txt_fontFamily: "SimHei",
             prop_txt_fontSize: 14,
 
+            prop_scene_width: SceneControls.getIns().view_width,
+            prop_scene_height: SceneControls.getIns().view_height,
+
         };
 
         EventMgr.getIns().removeByCaller(EventEnum.resetSelectList_scene2layout, Basic.EventObj_resetSelectList);
@@ -106,6 +109,30 @@ export default class PropertyList extends React.Component {
     getRgbaStr(): string {
         let color = this.state.prop_txt_color;
         return `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`;
+    }
+
+    onSceneTextHandleChange(textItem: any, type: string) {
+        if (type == PropertyTypeEnum.scene_width) {
+            let sceneWidth = parseInt(textItem.value);
+            if(sceneWidth > 1) {
+            } else {
+                sceneWidth = 1;
+            }
+            this.setState({
+                prop_scene_width: sceneWidth
+            });
+            SceneControls.getIns().view_width = sceneWidth;
+        } else if (type == PropertyTypeEnum.scene_height) {
+            let sceneHeight = parseInt(textItem.value);
+            if(sceneHeight > 1) {
+            } else {
+                sceneHeight = 1;
+            }
+            this.setState({
+                prop_scene_height: sceneHeight
+            });
+            SceneControls.getIns().view_height = sceneHeight;
+        }
     }
 
     onTextHandleChange(textItem: any, type: string) {
@@ -227,7 +254,55 @@ export default class PropertyList extends React.Component {
         return (<>
             {//未选择元素
                 this.state.layerList.length == 0 &&
-                <p>请先选择元素</p>
+                (<Grid
+                    container
+                    direction="row"
+                    justifyContent="flex-start"
+                    alignItems="flex-start"
+                    spacing={1}
+                    p={1}>
+                    <Grid item>
+                        <p>舞台属性</p>
+                    </Grid>
+                    <Grid item>
+                        <p style={{margin: 0}}>舞台尺寸(像素)</p>
+                    </Grid>
+                    <Grid item>
+                        <TextField
+                            id={PropertyTypeEnum.scene_width}
+                            value={this.state.prop_scene_width}
+                            hiddenLabel
+                            size="small"
+                            variant="standard"
+                            InputProps={{
+                                startAdornment: (
+                                    <span style={{width: "100px"}}>宽:</span>
+                                )
+                            }}
+                            onChange={(event) => {
+                                this.onSceneTextHandleChange(event.target, PropertyTypeEnum.scene_width);
+                            }}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <TextField
+                            id={PropertyTypeEnum.scene_height}
+                            value={this.state.prop_scene_height}
+                            hiddenLabel
+                            size="small"
+                            variant="standard"
+                            InputProps={{
+                                startAdornment: (
+                                    <span style={{width: "100px"}}>高:</span>
+                                )
+                            }}
+                            onChange={(event) => {
+                                this.onSceneTextHandleChange(event.target, PropertyTypeEnum.scene_height);
+                            }}
+                        />
+                    </Grid>
+
+                </Grid>)
             }
             {//位置
                 this.state.layerList.length > 0 &&
