@@ -47,10 +47,12 @@ const Home: NextPage = () => {
         EventMgr.getIns().dispatchEvent(EventEnum.changeAlertShow);
         // ObjectMgr.getIns().addImage(e.target.files[0]);
         let fileReader = new FileReader();
-        fileReader.readAsArrayBuffer(e.target.files[0]);
+        let file = e.target.files[0];
+        fileReader.readAsArrayBuffer(file);
         fileReader.onloadend = async (evt: any)=> {
           if (evt.target.readyState !== FileReader.DONE) return;
           // e.target.files[0].name
+          Basic.excel_fileName = file.name;
           Basic.excel_workbook = new exceljs.Workbook();
           Basic.excel_workbook.calcProperties.fullCalcOnLoad = true;
           await Basic.excel_workbook.xlsx.load(fileReader.result as ArrayBuffer);

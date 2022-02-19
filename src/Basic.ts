@@ -24,13 +24,20 @@ export class Basic {
     static EventObj_fontList = {};
     static EventObj_alert = {};
 
-
+    static get defaultStartLine () {
+        return 2;
+    }
+    static get defaultEndLine () {
+        return 99999;
+    }
+    static excel_fileName = "";
     static excel_workbook:exceljs.Workbook = null;
     static excel_worksheet:exceljs.Worksheet = null;
     static excelImportObj = {
         sheetNo: 1,
         sheetName: "",
-        startLine: 2,
-        endLine: 99999,
+        startLine: Basic.defaultStartLine,
+        endLine: Basic.defaultEndLine,
     };
+
 }

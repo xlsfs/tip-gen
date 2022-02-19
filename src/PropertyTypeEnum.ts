@@ -16,4 +16,11 @@ export const PropertyTypeEnum = {
     txt_family: "txt_family",
     txt_size: "txt_size",
     txt_color: "txt_color",
+    txt_align: "txt_align",
+
+
+    out_excel_sheet: "out_excel_sheet",
+    out_excel_startLine: "out_excel_startLine",
+    out_excel_endLine: "out_excel_endLine",
+
 }
