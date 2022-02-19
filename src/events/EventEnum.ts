@@ -11,4 +11,7 @@ export const EventEnum = {
     //更改选中对象属性
     changeSelectProperty: "changeSelectProperty",
     changeFontFamily: "changeFontFamily",
+
+    changeAlertShow: "changeAlertShow",
+    changeAlertShow_importExcel: "changeAlertShow_importExcel",
 }

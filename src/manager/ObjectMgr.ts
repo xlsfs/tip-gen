@@ -5,6 +5,7 @@ import { TextObj } from "../object/TextObj";
 import { SceneControls } from "./SceneControls";
 import { EventMgr } from "./EventMgr";
 import { EventEnum } from "../events/EventEnum";
+import * as exceljs from "exceljs";
 
 export class ObjectMgr {
     private static _instance: ObjectMgr = null;
@@ -47,6 +48,13 @@ export class ObjectMgr {
         return item;
     }
 
+    genOutData() {
+        for (let i = 0; i < this.objList.length; i++) {
+            this.objList[i].genOutData();
+        }
+
+    }
+
     resetLayer() {
         let _y = 0;
         let _gap = 1;
@@ -58,4 +66,86 @@ export class ObjectMgr {
         }
         EventMgr.getIns().dispatchEvent(EventEnum.resetLayerList);
     }
+
+    findNode_text(node:Node, out:Node[] = null): Node[] {
+        if(!out) out = [];
+        for (let i = 0; i < node.childNodes.length; i++) {
+            if (node.childNodes.item(i).nodeType != 3 && node.childNodes.item(i).nodeType != 4) {
+                let child = node.childNodes.item(i);
+                if (node.childNodes.item(i).nodeName == "text") {
+                    out.push(child);
+                } else if (child.childNodes) {
+                    this.findNode_text(child, out);
+                } else {
+                    break;
+                }
+            }
+        }
+        return out;
+    }
+
+    getRealTextPlaceholder(val:string) {
+        let valArr = [];
+        let valStr = val;
+        while(true) {
+            let startIdx = valStr.indexOf("{{");
+            if(startIdx != -1) {
+                if (startIdx != 0) {
+                    valArr.push({
+                        type: "string",
+                        val: valStr.substring(0, startIdx)
+                    });
+                }
+                let tmpValStr = valStr.substring(startIdx + 2);
+                let endIdx = tmpValStr.indexOf("}}");
+                if (endIdx == 0) {
+                    valArr.push({
+                        type:"string",
+                        val:"{{}}"
+                    });
+                    valStr = tmpValStr.substring(endIdx + 2);
+                } else if (endIdx == -1) {
+                    valArr.push({
+                        type:"string",
+                        val:"{{" + tmpValStr
+                    });
+                    break;
+                } else {
+                    let placeholder = tmpValStr.substring(0, endIdx);
+                    valArr.push({
+                        type: "placeholder",
+                        val: placeholder
+                    });
+                    valStr = tmpValStr.substring(endIdx + 2);
+                }
+            } else if(valStr.length > 0) {
+                valArr.push({
+                    type:"string",
+                    val:valStr
+                });
+                break;
+            } else {
+                break;
+            }
+        }
+        return valArr;
+    }
+
+    getRealText(outData:any[], row:exceljs.Row) {
+        let out = "";
+        for (let i = 0; i < outData.length; i++) {
+            let item = outData[i];
+            if (item.type == "string") {
+                out += item.val;
+            } else if (item.type == "placeholder") {
+                let val = row.getCell(item.val).value;
+                if(!val) {
+                    console.log("placeholder not found:", item.val, "row:",row.number);
+                }
+                out += val;
+            }
+        }
+        return out;
+    }
+
 }

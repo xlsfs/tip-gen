@@ -51,6 +51,7 @@ export class SceneControls {
         this.sceneBg = this.scene.rect().size("100%", "100%").attr({ fill: '#f0f0f0' });
 
         this.view = SVG().size(100, 100);
+
         this.viewBg = this.view.rect().size("100%", "100%").attr({ fill: '#ffffff' });
         this.view_width = 800;
         this.view_height = 400;
@@ -238,6 +239,7 @@ export class SceneControls {
     onClickObj(event: PointerEvent, obj: _baseObj) {
 
     }
+
     // getIntersections(event:MouseEvent ) {
     //     let objects = ObjectMgr.getIns().objList;
     //     let rect = this.dom.getBoundingClientRect();

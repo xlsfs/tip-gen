@@ -1,10 +1,9 @@
 
-import {Svg, Image, SVG} from "@svgdotjs/svg.js";
+import {Svg, Image, SVG, namespaces} from "@svgdotjs/svg.js";
 import { Basic } from "../Basic";
 import { EventEnum } from "../events/EventEnum";
 import { EventMgr } from "../manager/EventMgr";
 import { SceneControls } from "../manager/SceneControls";
-import { EdgesUtils } from "../utils/EdgesUtils";
 import { ObjStateEnum } from "./state/ObjStateEnum";
 import { _baseObj } from "./_baseObj";
 
@@ -19,6 +18,7 @@ export class ImageObj extends _baseObj {
     constructor() {
         super();
         this.svgItem = SVG();
+
         this.svgItem.node["main"] = this;
         this.svgItem.node["isBaseObj"] = true;
         this.svgItem.node["isImageObj"] = true;
@@ -57,6 +57,9 @@ export class ImageObj extends _baseObj {
         // };
     }
 
+    genOutData() {
+
+    }
 
     // loadedImageComplete() {
 
