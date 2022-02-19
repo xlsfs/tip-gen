@@ -112,10 +112,36 @@ export class ObjectMgr {
                     break;
                 } else {
                     let placeholder = tmpValStr.substring(0, endIdx);
-                    valArr.push({
-                        type: "placeholder",
-                        val: placeholder
-                    });
+                    //被{{}}包裹的字符串
+                    //内部有格式，可以设置为数字保留几位小数
+                    //内部用逗号分隔，{{F,num,2}}//这样则是数字保留两位小数
+                    let placeholderArr = placeholder.split(",");
+                    if(placeholderArr.length == 1){
+                        valArr.push({
+                            type: "placeholder",
+                            val: placeholder,
+                            isNum: false
+                        });
+                    } else {
+                        if(placeholderArr.length == 2) {
+                            valArr.push({
+                                type: "placeholder",
+                                val: placeholderArr[0],
+                                isNum: true,
+                                num: placeholderArr[1] == "num",
+                                fixed: 0
+                            });
+                        } else {
+                            valArr.push({
+                                type: "placeholder",
+                                val: placeholderArr[0],
+                                isNum: true,
+                                num: placeholderArr[1] == "num",
+                                fixed: parseInt(placeholderArr[2])
+                            });
+                        }
+
+                    }
                     valStr = tmpValStr.substring(endIdx + 2);
                 }
             } else if(valStr.length > 0) {

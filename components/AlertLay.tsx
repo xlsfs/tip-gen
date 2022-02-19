@@ -45,7 +45,6 @@ export default class AlertLay extends React.Component {
         if(ok) {
             if(Basic.excelImportObj.sheetNo != -1) {
                 Basic.excel_worksheet = Basic.excel_workbook.getWorksheet(Basic.excelImportObj.sheetNo);
-
             } else if(Basic.excelImportObj.sheetName != "") {
                 Basic.excel_worksheet = Basic.excel_workbook.getWorksheet(Basic.excelImportObj.sheetName);
             }
@@ -65,14 +64,16 @@ export default class AlertLay extends React.Component {
             }
             this.setAlertShow(false);
             this.setImportExcelShow(false);
+            EventMgr.getIns().dispatchEvent(EventEnum.resetSelectList_scene2layout);
         } else {
+            Basic.excel_fileName = "";
             Basic.excel_workbook = null;
 
             Basic.excelImportObj = {
                 sheetNo: 1,
                 sheetName: "",
-                startLine: 2,
-                endLine: 99999,
+                startLine: Basic.defaultStartLine,
+                endLine: Basic.defaultEndLine,
             };
             this.setAlertShow(false);
             this.setImportExcelShow(false);
@@ -108,7 +109,7 @@ export default class AlertLay extends React.Component {
                                 onChange={(event) => {
                                     let _tmp = event.target.value;
                                     let sheetNo = parseInt(_tmp);
-                                    if(sheetNo+"" == _tmp) {
+                                    if (sheetNo + "" == _tmp && sheetNo >= 1) {
                                         Basic.excelImportObj.sheetNo = sheetNo;
                                         Basic.excelImportObj.sheetName = "";
                                     } else {
@@ -126,7 +127,7 @@ export default class AlertLay extends React.Component {
                             <TextField
                                 // id={PropertyTypeEnum.pos_x}
                                 // value="2"
-                                defaultValue="2"
+                                defaultValue={Basic.defaultStartLine}
                                 hiddenLabel
                                 size="small"
                                 variant="standard"
@@ -143,7 +144,7 @@ export default class AlertLay extends React.Component {
                             <TextField
                                 // id={PropertyTypeEnum.pos_x}
                                 // value="99999"
-                                defaultValue="99999"
+                                defaultValue={Basic.defaultEndLine}
                                 hiddenLabel
                                 size="small"
                                 variant="standard"
