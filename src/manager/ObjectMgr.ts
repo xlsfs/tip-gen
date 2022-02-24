@@ -48,11 +48,12 @@ export class ObjectMgr {
         return item;
     }
 
-    genOutData() {
+    getSave() {
+        let out = [];
         for (let i = 0; i < this.objList.length; i++) {
-            this.objList[i].genOutData();
+            out.push(this.objList[i].getSave());
         }
-
+        return out;
     }
 
     resetLayer() {

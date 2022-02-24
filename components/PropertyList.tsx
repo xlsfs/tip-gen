@@ -53,6 +53,8 @@ export default class PropertyList extends React.Component {
             prop_txt_fontSize: 14,
             prop_txt_align: "left",
 
+
+            prop_scene_name: SceneControls.getIns().sceneName,
             prop_scene_width: SceneControls.getIns().view_width,
             prop_scene_height: SceneControls.getIns().view_height,
 
@@ -70,7 +72,7 @@ export default class PropertyList extends React.Component {
             this.setState({layerList: [...SceneControls.getIns().selected]});
             this.changeSelProperty();
         }, Basic.EventObj_resetSelectList);
-``
+
         EventMgr.getIns().removeByCaller(EventEnum.resetSelectList_layer2scene, Basic.EventObj_resetSelectList);
         EventMgr.getIns().add(EventEnum.resetSelectList_layer2scene, () => {
             this.setState({layerList: [...SceneControls.getIns().selected]});
@@ -142,7 +144,13 @@ export default class PropertyList extends React.Component {
     }
 
     onSceneTextHandleChange(textItem: any, type: string) {
-        if (type == PropertyTypeEnum.scene_width) {
+        if (type == PropertyTypeEnum.scene_name) {
+            let name = textItem.value;
+            SceneControls.getIns().sceneName = name;
+            this.setState({
+                prop_scene_width: SceneControls.getIns().sceneName
+            });
+        } else if (type == PropertyTypeEnum.scene_width) {
             let sceneWidth = parseInt(textItem.value);
             if(sceneWidth > 1) {
             } else {
@@ -348,7 +356,25 @@ export default class PropertyList extends React.Component {
                     p={1}>
                     <Grid item>
                         <p>舞台属性</p>
-                        <Divider/>
+                    </Grid>
+                    <Grid item>
+                        <TextField
+                            id={PropertyTypeEnum.scene_name}
+                            value={this.state.prop_scene_name}
+                            hiddenLabel
+                            size="small"
+                            variant="standard"
+                            InputProps={{
+                                startAdornment: (
+                                    <span style={{width: "100px"}}>名字:</span>
+                                )
+                            }}
+                            onChange={(event) => {
+                                this.onSceneTextHandleChange(event.target, PropertyTypeEnum.scene_name);
+                            }}
+                        />
+                    </Grid>
+                    <Grid item>
                         <p>舞台尺寸(像素)</p>
                     </Grid>
                     <Grid item>

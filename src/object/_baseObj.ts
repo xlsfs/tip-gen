@@ -7,6 +7,8 @@ export class _baseObj  {
 
     // protected wireframe: Mesh;
 
+    public type: string;
+
     public getState () {
         return this.state;
     }
@@ -22,8 +24,9 @@ export class _baseObj  {
     public isTextObj = false;
     public isImageObj = false;
 
-    constructor () {
+    constructor (type:string) {
         this.isBaseObj = true;
+        this.type = type;
     }
 
     remove() {
@@ -40,7 +43,7 @@ export class _baseObj  {
         }
     }
 
-    genOutData() {
-
+    getSave():any {
+        return null;
     }
 }
