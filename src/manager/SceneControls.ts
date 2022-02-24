@@ -1,11 +1,13 @@
-import { SVG, Svg, Rect, extend as SVGextend, Element as SVGElement, G } from '@svgdotjs/svg.js'
-import { EventEnum } from '../events/EventEnum';
-import { _baseObj } from "../object/_baseObj";
-import { EventMgr } from './EventMgr';
+import {SVG, Svg, Rect, extend as SVGextend, Element as SVGElement, G} from '@svgdotjs/svg.js'
+import {EventEnum} from '../events/EventEnum';
+import {_baseObj} from "../object/_baseObj";
+import {EventMgr} from './EventMgr';
+import {ObjectMgr} from "./ObjectMgr";
 
 export class SceneControls {
 
     private static _instance: SceneControls;
+
     public static getIns(): SceneControls {
         if (!SceneControls._instance) {
             SceneControls._instance = new SceneControls();
@@ -22,17 +24,38 @@ export class SceneControls {
     public get view_width() {
         return this._view_width;
     }
+
     public set view_width(w) {
         this._view_width = w;
         this.view.width(w);
     }
+
     private _view_height = 400;//可用区域高度
     public get view_height() {
         return this._view_height;
     }
+
     public set view_height(h) {
         this._view_height = h;
         this.view.height(h);
+    }
+
+    public _sceneName = "未命名";
+    public get sceneName() {
+        if(!!this._sceneName) {
+            this._sceneName = "未命名";
+        }
+        return this._sceneName;
+    }
+    public set sceneName(name) {
+        if (!!name) {
+            name = "未命名";
+        }
+        name = name.trim();
+        if (!!name) {
+            name = "未命名";
+        }
+        this._sceneName = name;
     }
 
     public selected: _baseObj[] = [];
@@ -48,11 +71,11 @@ export class SceneControls {
         let _h = this.dom.clientHeight;
 
         this.scene = SVG().size("100%", "100%");
-        this.sceneBg = this.scene.rect().size("100%", "100%").attr({ fill: '#f0f0f0' });
+        this.sceneBg = this.scene.rect().size("100%", "100%").attr({fill: '#f0f0f0'});
 
         this.view = SVG().size(100, 100);
 
-        this.viewBg = this.view.rect().size("100%", "100%").attr({ fill: '#ffffff' });
+        this.viewBg = this.view.rect().size("100%", "100%").attr({fill: '#ffffff'});
         this.view_width = 800;
         this.view_height = 400;
 
@@ -108,7 +131,8 @@ export class SceneControls {
                 item.svgItem.beforePosY = item.svgItem.y();
             }
             if (isDownItem) {
-                this.isDownObj = true;;
+                this.isDownObj = true;
+                ;
             }
         }
 
@@ -205,7 +229,7 @@ export class SceneControls {
                     isChangSelect = true;
                 }
             }
-            if(isChangSelect) {
+            if (isChangSelect) {
                 EventMgr.getIns().dispatchEvent(EventEnum.resetSelectList_scene2layout);
             }
         }
@@ -221,7 +245,7 @@ export class SceneControls {
         }
     }
 
-    onResetSelectList(selItems:any[]) {
+    onResetSelectList(selItems: any[]) {
         if (this.selected.length > 0) {
             for (let i = 0; i < this.selected.length; i++) {
                 let item = this.selected[i];
@@ -230,7 +254,7 @@ export class SceneControls {
             this.selected.length = 0;
         }
 
-        for(let i = 0; i < selItems.length; i++) {
+        for (let i = 0; i < selItems.length; i++) {
             selItems[i].setSel(true);
             this.selected.push(selItems[i]);
         }
@@ -238,6 +262,20 @@ export class SceneControls {
 
     onClickObj(event: PointerEvent, obj: _baseObj) {
 
+    }
+
+    getSave() {
+        let out = {
+            attribute: {
+                name: this.sceneName,
+                view: {
+                    width: this.view_width,
+                    height: this.view_height,
+                }
+            },
+            list: ObjectMgr.getIns().getSave()
+        }
+        return out;
     }
 
     // getIntersections(event:MouseEvent ) {

@@ -2,7 +2,6 @@ import { Text } from "@svgdotjs/svg.js";
 import { SceneControls } from "../manager/SceneControls";
 import { ObjStateEnum } from "./state/ObjStateEnum";
 import { _baseObj } from "./_baseObj";
-import {ObjectMgr} from "../manager/ObjectMgr";
 
 export class TextObj extends _baseObj {
 
@@ -11,7 +10,7 @@ export class TextObj extends _baseObj {
     public svgItem: Text;
 
     constructor() {
-        super();
+        super("text");
         let sceneControls = SceneControls.getIns();
         this.svgItem = sceneControls.view.plain(TextObj.placeholder);
         this.svgItem.node.style.userSelect = "none";
@@ -41,7 +40,6 @@ export class TextObj extends _baseObj {
         this.svgItem.x(0);
         this.svgItem.y(0);
         this.setState(ObjStateEnum.loaded);
-
     }
 
     setText(val:string) {
@@ -49,13 +47,26 @@ export class TextObj extends _baseObj {
         this.layerName = val;
     }
 
-    genOutData() {
-        // let outData = ObjectMgr.getIns().getRealTextPlaceholder(this.layerName);
-        // if(outData && outData.length > 1) {
-        //     this.svgItem.node["outData"] = outData;
-        // } else {
-        //     this.svgItem.node["outData"] = undefined;
-        // }
+    getSave():any {
+        return {
+            type: this.type,
+            layerName: this.layerName,
+
+            x: this.svgItem.x(),
+            y: this.svgItem.y(),
+
+            // width: this.svgItem.width(),
+            // height: this.svgItem.height(),
+
+            text: this.svgItem.text(),
+            fontFamily: this.svgItem.font("family"),
+            fontSize: this.svgItem.font("size"),
+            // fontWeight: this.svgItem.fontWeight(),
+            // fontStyle: this.svgItem.fontStyle(),
+
+            color: this.svgItem.fill(),
+            align: this.svgItem.attr("text-anchor"),
+        };
     }
 
 }

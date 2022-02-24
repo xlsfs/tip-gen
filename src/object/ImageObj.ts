@@ -14,9 +14,10 @@ export class ImageObj extends _baseObj {
 
     public svgItem: Svg;
     public image: Image;
+    public imageData: string;
 
     constructor() {
-        super();
+        super("image");
         this.svgItem = SVG();
 
         this.svgItem.node["main"] = this;
@@ -35,6 +36,7 @@ export class ImageObj extends _baseObj {
     init(name: string, src: string) {
         this.setState(ObjStateEnum.loading);
         this.layerName = name;
+        this.imageData = src;
         this.image.load(src, (event: Event) => {
             let ww = this.image.width() as number;
             let hh = this.image.height() as number;
@@ -57,19 +59,29 @@ export class ImageObj extends _baseObj {
         // };
     }
 
-    genOutData() {
+    getSave():any {
 
+        return {
+            type: this.type,
+            layerName: this.layerName,
+
+            x: this.svgItem.x(),
+            y: this.svgItem.y(),
+
+            width: this.svgItem.width(),
+            height: this.svgItem.height(),
+
+            image: this.imageData,
+        };
     }
 
     // loadedImageComplete() {
-
     // // this.image.width;
     // // this.image.height;
     // this.texture = new Texture();
     // this.texture.image = this.image;
     // this.texture.needsUpdate = true;
     // // this.texture = new TextureLoader().load("https://r105.threejsfundamentals.org/threejs/resources/images/wall.jpg");
-
     // let geo = new BufferGeometry();
     // geo.attributes.position = new BufferAttribute(new Float32Array([
     //     -.5, 0, .5, // 0
@@ -87,7 +99,6 @@ export class ImageObj extends _baseObj {
     //         // vertexColors: true
     //     })
     // );
-
     // var edges = new EdgesGeometry(geo, Basic.DEFAULT_EDGES_THRESHOLD_ANGLE);
     // this.wireframe = EdgesUtils.createWireframeFromEdgesGeometry(edges, {
     //     color: Basic.COLOR_HOVERON_WIREFRAME_BOX,
@@ -95,14 +106,12 @@ export class ImageObj extends _baseObj {
     // });
     // this.wireframe.name = 'wireframeBox';
     // this.wireframe.visible = false;
-
     // let scale = Basic.DEFAULT_UNIT_LENGTH_p;
     // this.model.scale.set(this.image.width / scale, 1, this.image.height / scale);
     // this.add(this.model);
     // this.wireframe.scale.set(this.image.width / scale, 1, this.image.height / scale);
     // this.add(this.wireframe);
     // console.log(this.model.scale, scale);
-
     // }
 }
 

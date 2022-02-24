@@ -1,5 +1,6 @@
 export const PropertyTypeEnum = {
 
+    scene_name: 'scene_name',
     scene_width: 'scene_width',
     scene_height: 'scene_height',
     out_scale: 'out_scale',
