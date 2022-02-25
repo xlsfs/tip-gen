@@ -3,6 +3,7 @@ import {EventEnum} from '../events/EventEnum';
 import {_baseObj} from "../object/_baseObj";
 import {EventMgr} from './EventMgr';
 import {ObjectMgr} from "./ObjectMgr";
+import {Basic} from "../Basic";
 
 export class SceneControls {
 
@@ -40,20 +41,20 @@ export class SceneControls {
         this.view.height(h);
     }
 
-    public _sceneName = "未命名";
+    public _sceneName = Basic.defaultSceneName;
     public get sceneName() {
         if(!!this._sceneName) {
-            this._sceneName = "未命名";
+            this._sceneName = Basic.defaultSceneName;
         }
         return this._sceneName;
     }
     public set sceneName(name) {
         if (!!name) {
-            name = "未命名";
+            name = Basic.defaultSceneName;
         }
         name = name.trim();
         if (!!name) {
-            name = "未命名";
+            name = Basic.defaultSceneName;
         }
         this._sceneName = name;
     }
@@ -277,7 +278,7 @@ export class SceneControls {
         }
         return out;
     }
-    
+
     cleanScene() {
         this.cleanAllSel();
         let objList = ObjectMgr.getIns().objList;

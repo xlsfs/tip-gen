@@ -16,6 +16,12 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import {SceneControls} from '../src/manager/SceneControls';
 import {SketchPicker} from 'react-color';
 import dynamic from "next/dynamic";
+import List from '@mui/material/List';
+import Button from "@mui/material/Button";
+import Canvg from "canvg";
+import * as exceljs from "exceljs";
+import {useEffect} from "react";
+import {ExcelMgr} from "../src/manager/ExcelMgr";
 import {Divider} from "@mui/material";
 
 const FontList = dynamic(
@@ -59,10 +65,11 @@ export default class PropertyList extends React.Component {
             prop_scene_height: SceneControls.getIns().view_height,
 
             prop_out_excel_fileName: Basic.excel_fileName,
-            prop_out_excel_sheetName: Basic.excel_workbook&&Basic.excel_worksheet?Basic.excel_worksheet.name:"",
-            prop_out_excel_sheet: Basic.excelImportObj.sheetNo>=1?Basic.excelImportObj.sheetNo:Basic.excelImportObj.sheetName,
+            prop_out_excel_sheetName: ExcelMgr.getIns().getWorksheetName(),
+            prop_out_excel_sheet: Basic.excelImportObj.sheetNo >= 1 ? Basic.excelImportObj.sheetNo : Basic.excelImportObj.sheetName,
             prop_out_excel_startLine: Basic.excelImportObj.startLine,
             prop_out_excel_endLine: Basic.excelImportObj.endLine,
+            prop_out_file_name: Basic.excelImportObj.outFileName,
 
 
         };
@@ -83,7 +90,42 @@ export default class PropertyList extends React.Component {
         EventMgr.getIns().add(EventEnum.changeSelectProperty, () => {
             this.changeSelProperty();
         }, Basic.EventObj_resetSelectList);
+    }
 
+    onChangeXlsFileInputHandler = this.onChangeXlsFileInput.bind(this);
+    onChangeXlsFileInput(e:any) {
+        // console.log(e.target);
+        if (e.target && e.target.files && e.target.files.length > 0) {
+            EventMgr.getIns().dispatchEvent(EventEnum.changeAlertShow);
+            // ObjectMgr.getIns().addImage(e.target.files[0]);
+            let fileReader = new FileReader();
+            let file = e.target.files[0];
+            fileReader.readAsArrayBuffer(file);
+            fileReader.onloadend = async (evt: any) => {
+                if (evt.target.readyState !== FileReader.DONE) return;
+                // e.target.files[0].name
+                Basic.excel_fileName = file.name;
+                await ExcelMgr.getIns().openExcel(fileReader.result as ArrayBuffer);
+                EventMgr.getIns().dispatchEvent(EventEnum.changeAlertShow_importExcel);
+            }
+        }
+        let xlsFileInput = document.getElementById("btn_loadExcelFile") as HTMLInputElement;
+        if(xlsFileInput) {
+            xlsFileInput.value = null;
+        }
+    }
+    componentDidMount() {
+
+        let xlsFileInput = document.getElementById("btn_loadExcelFile") as HTMLInputElement;
+        if(xlsFileInput) {
+            xlsFileInput.addEventListener('change', this.onChangeXlsFileInputHandler);
+        }
+    }
+    componentWillUnmount() {
+        let xlsFileInput = document.getElementById("btn_loadExcelFile") as HTMLInputElement;
+        if(xlsFileInput) {
+            xlsFileInput.removeEventListener('change', this.onChangeXlsFileInputHandler);
+        }
     }
 
     changeSelProperty() {
@@ -128,10 +170,11 @@ export default class PropertyList extends React.Component {
                 prop_scene_height: SceneControls.getIns().view_height,
 
                 prop_out_excel_fileName: Basic.excel_fileName,
-                prop_out_excel_sheetName: Basic.excel_workbook&&Basic.excel_worksheet?Basic.excel_worksheet.name:"",
+                prop_out_excel_sheetName: ExcelMgr.getIns().getWorksheetName(),
                 prop_out_excel_sheet: Basic.excelImportObj.sheetNo>=1?Basic.excelImportObj.sheetNo:Basic.excelImportObj.sheetName,
                 prop_out_excel_startLine: Basic.excelImportObj.startLine,
                 prop_out_excel_endLine: Basic.excelImportObj.endLine,
+                out_file_name: Basic.excelImportObj.outFileName,
             };
 
             this.setState(propObj);
@@ -174,25 +217,25 @@ export default class PropertyList extends React.Component {
             let tmp_worksheet;
             let sheetNo = parseInt(textItem.value);
             if(sheetNo + "" == textItem.value && sheetNo >= 1) {
-                tmp_worksheet = Basic.excel_workbook.getWorksheet(sheetNo);
+                tmp_worksheet = ExcelMgr.getIns().openSheet(sheetNo);
                 if(tmp_worksheet) {
                     Basic.excelImportObj.sheetNo = sheetNo;
                     Basic.excelImportObj.sheetName = "";
-                    Basic.excel_worksheet = tmp_worksheet;
+                    ExcelMgr.getIns().excelJs_worksheet = tmp_worksheet;
                     this.setState({
                         prop_out_excel_sheet: sheetNo,
-                        prop_out_excel_sheetName: tmp_worksheet.name,
+                        prop_out_excel_sheetName: tmp_worksheet.sheetName,
                     });
                 }
             } else {
-                tmp_worksheet = Basic.excel_workbook.getWorksheet(textItem.value);
+                tmp_worksheet = ExcelMgr.getIns().openSheet(textItem.value);
                 if(tmp_worksheet) {
                     Basic.excelImportObj.sheetNo = -1;
                     Basic.excelImportObj.sheetName = textItem.value;
-                    Basic.excel_worksheet = tmp_worksheet;
+                    ExcelMgr.getIns().excelJs_worksheet = tmp_worksheet;
                     this.setState({
                         prop_out_excel_sheet: textItem.value,
-                        prop_out_excel_sheetName: tmp_worksheet.name,
+                        prop_out_excel_sheetName: tmp_worksheet.sheetName,
                     });
                 }
             }
@@ -216,6 +259,15 @@ export default class PropertyList extends React.Component {
                 prop_out_excel_endLine: endLine
             });
             Basic.excelImportObj.endLine = endLine;
+        } else if (type == PropertyTypeEnum.out_file_name) {
+            let outFileName = textItem.value;
+            if(!!outFileName) {
+                this.setState({
+                    prop_out_file_name: outFileName
+                });
+                Basic.excelImportObj.outFileName = outFileName;
+            }
+
         }
     }
 
@@ -343,8 +395,122 @@ export default class PropertyList extends React.Component {
         this.onTextHandleChange_color(PropertyTypeEnum.txt_color);
     }
 
+    async outImage () {
+
+        if (!ExcelMgr.getIns().excelJs_workbook || !ExcelMgr.getIns().excelJs_worksheet) {
+            alert("请先导入excel文件");
+            return;
+        }
+
+
+        let r = confirm("是否确定要输出图片？文件名为" + Basic.excelImportObj.outFileName);
+        if (r == true) {
+        } else {
+            return;
+        }
+
+        let sceneControls = SceneControls.getIns();
+        let objectMgr = ObjectMgr.getIns();
+        // html2canvas(SceneControls.getIns().view.node).then((canvas)=> {
+        //   document.body.appendChild(canvas);
+        // }).catch((err)=> {
+        //   console.log(err);
+        //   debugger;
+        // });
+        sceneControls.cleanAllSel();
+
+        let viewCopy = sceneControls.view.clone();
+
+        viewCopy.attr({xmlns: 'http://www.w3.org/2000/svg', version: '1.1'})
+            .attr('xmlns:xlink', 'http://www.w3.org/1999/xlink', 'http://www.w3.org/2000/xmlns/')
+            .attr('xmlns:svgjs', 'http://svgjs.dev/svgjs', 'http://www.w3.org/2000/xmlns/')
+
+        viewCopy.x(0);
+        viewCopy.y(0);
+
+        let nodeArr = objectMgr.findNode_text(viewCopy.node);
+        console.log(nodeArr);
+        let textNodeObj = [];
+        for (let i = 0; i < nodeArr.length; i++) {
+            let textNode = nodeArr[i] as any;
+            let outData = objectMgr.getRealTextPlaceholder(textNode.innerHTML);
+            if(!outData || outData.length == 0) {
+                debugger;
+                outData = objectMgr.getRealTextPlaceholder(textNode.innerHTML);
+            }
+            // let needCell = [];
+            // for(let j = 0; j < outData.length; j ++) {
+            //   if(outData[j].type) {
+            //     needCell.push(outData[j].val);
+            //   }
+            // }
+            textNodeObj[i] = {node: textNode, data: outData};//, needCell: needCell};
+            console.log(outData);
+        }
+
+
+        let worksheet = ExcelMgr.getIns().getWorksheet();
+        let totalLine = worksheet.rowCount;
+        if (totalLine > Basic.excelImportObj.endLine) {
+            totalLine = Basic.excelImportObj.endLine;
+            if (totalLine < Basic.excelImportObj.startLine) {
+                alert("导入的excel文件数据不足");
+                return;
+            }
+        }
+        let outFileNameData = ObjectMgr.getIns().getRealTextPlaceholder(Basic.excelImportObj.outFileName);
+        for (let l = Basic.excelImportObj.startLine; l <= totalLine; l++) {
+            let row = worksheet.getRow(l);
+
+            for (let i = 0; i < textNodeObj.length; i++) {
+                let outData = textNodeObj[i];
+                let textNode = outData.node;
+                let data = outData.data;
+
+                // let needCell = outData.needCell;
+                textNode.innerHTML = objectMgr.getRealText(data, row);
+            }
+            await this.outImageLogic(viewCopy.node, outFileNameData, row);
+        }
+    }
+
+    async outImageLogic (viewCopy: SVGSVGElement, outFileNameData:any, row: exceljs.Row) {
+        let canvas = document.createElement('canvas');
+        let ctx = canvas.getContext('2d');
+        document.body.appendChild(canvas);
+
+        let v = await Canvg.from(ctx, viewCopy.outerHTML);
+
+        await v.render();
+        let MIME_TYPE = "image/png";
+        let imgURL = canvas.toDataURL(MIME_TYPE);
+        let dlLink = document.createElement('a');
+
+        let downloadName = ObjectMgr.getIns().getRealText(outFileNameData, row);
+
+        dlLink.download = downloadName+".png";
+        dlLink.href = imgURL;
+        dlLink.dataset.downloadurl = [MIME_TYPE, dlLink.download, dlLink.href].join(':');
+
+        document.body.appendChild(dlLink);
+        dlLink.click();
+        document.body.removeChild(dlLink);
+
+    }
+
     render() {
         return (<>
+            <List
+                sx={{
+                    width: '100%',
+                    maxWidth: 360,
+                    bgcolor: 'background.paper',
+                    border: '1px solid #aaa',
+                    position: 'relative',
+                    overflow: 'auto',
+                    maxHeight: "420px",
+                }}
+            >
             {//未选择元素
                 this.state.layerList.length == 0 &&
                 (<Grid
@@ -354,9 +520,6 @@ export default class PropertyList extends React.Component {
                     alignItems="flex-start"
                     spacing={1}
                     p={1}>
-                    <Grid item>
-                        <p>舞台属性</p>
-                    </Grid>
                     <Grid item>
                         <TextField
                             id={PropertyTypeEnum.scene_name}
@@ -375,7 +538,7 @@ export default class PropertyList extends React.Component {
                         />
                     </Grid>
                     <Grid item>
-                        <p>舞台尺寸(像素)</p>
+                        <p style={{margin:0}}>舞台尺寸(像素)</p>
                     </Grid>
                     <Grid item>
                         <TextField
@@ -412,23 +575,31 @@ export default class PropertyList extends React.Component {
                         />
                     </Grid>
                     <Grid item>
-                        <span>Excel文件信息</span>
+                        <input type="file" id="btn_loadExcelFile" style={{display: "none"}}
+                               accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
+                        <Button variant="contained" size="small" onClick={() => {
+                            let fileInput = document.getElementById("btn_loadExcelFile");
+                            fileInput.click();
+                        }}>载入数据表</Button>
+                    </Grid>
+                    <Grid item>
+                        <p style={{margin:0}}>Excel文件信息</p>
                     </Grid>
 
-                    {(!Basic.excel_workbook || !Basic.excel_worksheet) && (
-                        <Grid item><p>未选择Excel文件</p></Grid>
+                    {(!ExcelMgr.getIns().excelJs_workbook || !ExcelMgr.getIns().excelJs_worksheet) && (
+                        <Grid item><p style={{margin:2}}>未选择Excel文件</p></Grid>
                     )}
 
-                    {(Basic.excel_workbook && Basic.excel_worksheet) && (<>
+                    {(ExcelMgr.getIns().excelJs_workbook && ExcelMgr.getIns().excelJs_worksheet) && (<>
                         <Grid item>
-                            <p>
+                            <p style={{margin:0}}>
                                 工作簿: {this.state.prop_out_excel_fileName}
                                 <br/>
                                 工作表: {this.state.prop_out_excel_sheetName}
                             </p>
                         </Grid>
                         <Grid item>
-                            <p style={{margin: 0}}>工作表编号，从1开始:</p>
+                            <p style={{margin: 0}}>工作表编号，从1开始</p>
                         </Grid>
                         <Grid item>
                             <TextField
@@ -471,6 +642,26 @@ export default class PropertyList extends React.Component {
                                     this.onSceneTextHandleChange(event.target, PropertyTypeEnum.out_excel_endLine);
                                 }}
                             />
+                        </Grid>
+                        <Grid item>
+                            <p style={{margin: 0}}><br/>输出文件名</p>
+                        </Grid>
+                        <Grid item>
+                            <TextField
+                                id={PropertyTypeEnum.out_file_name}
+                                value={this.state.prop_out_file_name}
+                                hiddenLabel
+                                size="small"
+                                variant="standard"
+                                onChange={(event) => {
+                                    this.onSceneTextHandleChange(event.target, PropertyTypeEnum.out_file_name);
+                                }}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <Button variant="contained" size="small" onClick={() => {
+                                this.outImage();
+                            }}>输出图片</Button>
                         </Grid>
                     </>)}
                 </Grid>)
@@ -695,6 +886,7 @@ export default class PropertyList extends React.Component {
                     </Grid>
                 </Grid>)
             }
+            </List>
         </>);
     }
 }

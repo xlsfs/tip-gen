@@ -6,6 +6,7 @@ import {Basic} from "../src/Basic";
 import Button from "@mui/material/Button";
 import {EventMgr} from "../src/manager/EventMgr";
 import {EventEnum} from "../src/events/EventEnum";
+import {ExcelMgr} from "../src/manager/ExcelMgr";
 
 export default class AlertLay extends React.Component {
 
@@ -43,12 +44,14 @@ export default class AlertLay extends React.Component {
 
     submitImportExcel (ok:boolean) {
         if(ok) {
+            let sheet = null;
             if(Basic.excelImportObj.sheetNo != -1) {
-                Basic.excel_worksheet = Basic.excel_workbook.getWorksheet(Basic.excelImportObj.sheetNo);
+                sheet = ExcelMgr.getIns().openSheet(Basic.excelImportObj.sheetNo);
             } else if(Basic.excelImportObj.sheetName != "") {
-                Basic.excel_worksheet = Basic.excel_workbook.getWorksheet(Basic.excelImportObj.sheetName);
+                sheet = ExcelMgr.getIns().openSheet(Basic.excelImportObj.sheetName);
             }
-            if (!Basic.excel_worksheet) {
+            ExcelMgr.getIns().excelJs_worksheet = sheet;
+            if (!ExcelMgr.getIns().excelJs_worksheet) {
                 alert("工作表编号错误,请确认");
                 return;
             }
@@ -67,7 +70,7 @@ export default class AlertLay extends React.Component {
             EventMgr.getIns().dispatchEvent(EventEnum.resetSelectList_scene2layout);
         } else {
             Basic.excel_fileName = "";
-            Basic.excel_workbook = null;
+            ExcelMgr.getIns().excelJs_workbook = null;
 
             Basic.excelImportObj = {
                 sheetNo: 1,
