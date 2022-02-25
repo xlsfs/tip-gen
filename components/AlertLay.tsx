@@ -77,6 +77,7 @@ export default class AlertLay extends React.Component {
                 sheetName: "",
                 startLine: Basic.defaultStartLine,
                 endLine: Basic.defaultEndLine,
+                outFileName: Basic.defaultOutFileName,
             };
             this.setAlertShow(false);
             this.setImportExcelShow(false);
