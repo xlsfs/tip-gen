@@ -56,7 +56,7 @@ const Home: NextPage = () => {
                     if (evt.target.readyState !== FileReader.DONE) return;
                     // e.target.files[0].name
                     console.log(file.name);
-                    console.log(fileReader.result);
+                    // console.log(fileReader.result);
                     try {
                         let json = JSON.parse(fileReader.result as string);
                         if (json && json.scene) {
@@ -159,12 +159,6 @@ const Home: NextPage = () => {
                     <Grid item>
                     </Grid>
 
-                    <Grid item>
-                    </Grid>
-                    <Grid item>
-                    </Grid>
-                    <Grid item>
-                    </Grid>
 
                     <Grid item>
                         <input type="file" id="btn_loadImgFile" style={{display: "none"}}
@@ -206,22 +200,22 @@ const Home: NextPage = () => {
                 </Grid>
             </div>
 
-            <div className={styles.container_bottom}>
-                <Slider
-                    defaultValue={0}
-                    min={slider_min}
-                    max={slider_max}
-                    step={1}
-                    size="small"
-                    valueLabelDisplay="auto"
-                    onChange={(event: Event, value: number | number[]) => {
-                        if (typeof value === 'number') {
-                            EventMgr.getIns().dispatchEvent(EventEnum.changeCameraZoom,
-                                [(value - slider_min) / (slider_max - slider_min)]);
-                            //this.getPercent()
-                        }
-                    }}/>
-            </div>
+            {/*<div className={styles.container_bottom}>*/}
+            {/*    <Slider*/}
+            {/*        defaultValue={0}*/}
+            {/*        min={slider_min}*/}
+            {/*        max={slider_max}*/}
+            {/*        step={1}*/}
+            {/*        size="small"*/}
+            {/*        valueLabelDisplay="auto"*/}
+            {/*        onChange={(event: Event, value: number | number[]) => {*/}
+            {/*            if (typeof value === 'number') {*/}
+            {/*                EventMgr.getIns().dispatchEvent(EventEnum.changeCameraZoom,*/}
+            {/*                    [(value - slider_min) / (slider_max - slider_min)]);*/}
+            {/*                //this.getPercent()*/}
+            {/*            }*/}
+            {/*        }}/>*/}
+            {/*</div>*/}
 
             <AlertLay></AlertLay>
 
