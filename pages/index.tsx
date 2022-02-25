@@ -12,11 +12,11 @@ import Grid from '@mui/material/Grid';
 import {ObjectMgr} from '../src/manager/ObjectMgr'
 import LayerList from '../components/LayerList'
 import PropertyList from '../components/PropertyList'
-import * as exceljs from 'exceljs';
-import Canvg from 'canvg';
 import {SceneControls} from "../src/manager/SceneControls";
 import {Basic} from "../src/Basic";
 import AlertLay from '../components/AlertLay';
+import * as exceljs from "exceljs";
+import * as sheetjs from "xlsx";
 
 const Home: NextPage = () => {
 
@@ -27,6 +27,11 @@ const Home: NextPage = () => {
         window.sceneControls = SceneControls.getIns();
         // @ts-ignore
         window.objectMgr = ObjectMgr.getIns();
+        // @ts-ignore
+        window.sheetjs = sheetjs;
+        // @ts-ignore
+        window.exceljs = exceljs;
+
         document.addEventListener('gesturestart', function (event) {
             event.preventDefault();
         });
@@ -38,29 +43,6 @@ const Home: NextPage = () => {
                 ObjectMgr.getIns().addImage(e.target.files[0]);
             }
             imgFileInput.value = null;
-        });
-
-        let xlsFileInput = document.getElementById("btn_loadExcelFile") as HTMLInputElement;
-        xlsFileInput.addEventListener('change', (e: any) => {
-            // console.log(e.target);
-            if (e.target && e.target.files && e.target.files.length > 0) {
-                EventMgr.getIns().dispatchEvent(EventEnum.changeAlertShow);
-                // ObjectMgr.getIns().addImage(e.target.files[0]);
-                let fileReader = new FileReader();
-                let file = e.target.files[0];
-                fileReader.readAsArrayBuffer(file);
-                fileReader.onloadend = async (evt: any) => {
-                    if (evt.target.readyState !== FileReader.DONE) return;
-                    // e.target.files[0].name
-                    Basic.excel_fileName = file.name;
-                    Basic.excel_workbook = new exceljs.Workbook();
-                    Basic.excel_workbook.calcProperties.fullCalcOnLoad = true;
-                    await Basic.excel_workbook.xlsx.load(fileReader.result as ArrayBuffer);
-                    console.log(Basic.excel_workbook);
-                    EventMgr.getIns().dispatchEvent(EventEnum.changeAlertShow_importExcel);
-                }
-            }
-            xlsFileInput.value = null;
         });
 
         let fileInput = document.getElementById("btn_openFile") as HTMLInputElement;
@@ -104,92 +86,6 @@ const Home: NextPage = () => {
 
     let createNewText = () => {
         ObjectMgr.getIns().addText();
-    };
-
-    let outImage = async () => {
-        if (!Basic.excel_workbook || !Basic.excel_worksheet) {
-            alert("请先导入excel文件");
-            return;
-        }
-
-        let sceneControls = SceneControls.getIns();
-        let objectMgr = ObjectMgr.getIns();
-        // html2canvas(SceneControls.getIns().view.node).then((canvas)=> {
-        //   document.body.appendChild(canvas);
-        // }).catch((err)=> {
-        //   console.log(err);
-        //   debugger;
-        // });
-        sceneControls.cleanAllSel();
-
-        let viewCopy = sceneControls.view.clone();
-
-        viewCopy.attr({xmlns: 'http://www.w3.org/2000/svg', version: '1.1'})
-            .attr('xmlns:xlink', 'http://www.w3.org/1999/xlink', 'http://www.w3.org/2000/xmlns/')
-            .attr('xmlns:svgjs', 'http://svgjs.dev/svgjs', 'http://www.w3.org/2000/xmlns/')
-
-        viewCopy.x(0);
-        viewCopy.y(0);
-
-        let nodeArr = objectMgr.findNode_text(viewCopy.node);
-        console.log(nodeArr);
-        let textNodeObj = [];
-        for (let i = 0; i < nodeArr.length; i++) {
-            let textNode = nodeArr[i] as any;
-            let outData = objectMgr.getRealTextPlaceholder(textNode.innerHTML);
-            // let needCell = [];
-            // for(let j = 0; j < outData.length; j ++) {
-            //   if(outData[j].type) {
-            //     needCell.push(outData[j].val);
-            //   }
-            // }
-            textNodeObj[i] = {node: textNode, data: outData};//, needCell: needCell};
-            console.log(outData);
-        }
-
-
-        let worksheet = Basic.excel_worksheet;
-        let totalLine = worksheet.rowCount;
-        if (totalLine > Basic.excelImportObj.endLine) {
-            totalLine = Basic.excelImportObj.endLine;
-            if (totalLine < Basic.excelImportObj.startLine) {
-                alert("导入的excel文件数据不足");
-                return;
-            }
-        }
-        for (let l = Basic.excelImportObj.startLine; l < totalLine; l++) {
-            let row = worksheet.getRow(l);
-
-            for (let i = 0; i < textNodeObj.length; i++) {
-                let outData = textNodeObj[i];
-                let textNode = outData.node;
-                let data = outData.data;
-                // let needCell = outData.needCell;
-                textNode.innerHTML = objectMgr.getRealText(data, row);
-            }
-            await outImageLogic(viewCopy.node);
-        }
-    };
-
-    let outImageLogic = async (viewCopy: SVGSVGElement) => {
-        let canvas = document.createElement('canvas');
-        let ctx = canvas.getContext('2d');
-        document.body.appendChild(canvas);
-
-        let v = await Canvg.from(ctx, viewCopy.outerHTML);
-
-        await v.render();
-        let MIME_TYPE = "image/png";
-        let imgURL = canvas.toDataURL(MIME_TYPE);
-        let dlLink = document.createElement('a');
-        dlLink.download = "001.png";
-        dlLink.href = imgURL;
-        dlLink.dataset.downloadurl = [MIME_TYPE, dlLink.download, dlLink.href].join(':');
-
-        document.body.appendChild(dlLink);
-        dlLink.click();
-        document.body.removeChild(dlLink);
-
     };
 
     let saveFile = () => {
@@ -262,31 +158,14 @@ const Home: NextPage = () => {
                     </Grid>
                     <Grid item>
                     </Grid>
-                    <Grid item>
-                        <input type="file" id="btn_loadExcelFile" style={{display: "none"}}
-                               accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
-                        <Button variant="contained" size="small" onClick={() => {
-                            let fileInput = document.getElementById("btn_loadExcelFile");
-                            fileInput.click();
-                        }}>载入数据表</Button>
-                    </Grid>
-                    <Grid item>
-                        <Button variant="contained" size="small" onClick={() => {
-                            outImage();
-                        }}>输出图片</Button>
-                    </Grid>
-                </Grid>
-            </div>
 
-            <div className={styles.container_left}>
-                <Grid
-                    container
-                    direction="column"
-                    justifyContent="flex-start"
-                    alignItems="flex-start"
-                    spacing={1}
-                    p={1}
-                >
+                    <Grid item>
+                    </Grid>
+                    <Grid item>
+                    </Grid>
+                    <Grid item>
+                    </Grid>
+
                     <Grid item>
                         <input type="file" id="btn_loadImgFile" style={{display: "none"}}
                                accept="image/png, image/jpeg"/>
@@ -300,9 +179,9 @@ const Home: NextPage = () => {
                             createNewText();
                         }}>新建文本</Button>
                     </Grid>
-
                 </Grid>
             </div>
+
             <div className={styles.container_right_top}>
                 <div>
                     <span>属性</span>

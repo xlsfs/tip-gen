@@ -1,14 +1,15 @@
-import { ImageObj } from "../object/ImageObj";
-import { Main_draw } from "../Main_draw";
-import { _baseObj } from "../object/_baseObj";
-import { TextObj } from "../object/TextObj";
-import { SceneControls } from "./SceneControls";
-import { EventMgr } from "./EventMgr";
-import { EventEnum } from "../events/EventEnum";
+import {ImageObj} from "../object/ImageObj";
+import {Main_draw} from "../Main_draw";
+import {_baseObj} from "../object/_baseObj";
+import {TextObj} from "../object/TextObj";
+import {SceneControls} from "./SceneControls";
+import {EventMgr} from "./EventMgr";
+import {EventEnum} from "../events/EventEnum";
 import * as exceljs from "exceljs";
 
 export class ObjectMgr {
     private static _instance: ObjectMgr = null;
+
     public static getIns(): ObjectMgr {
         if (!ObjectMgr._instance) {
             ObjectMgr._instance = new ObjectMgr();
@@ -28,7 +29,7 @@ export class ObjectMgr {
         let item = new ImageObj();
         var fileReader = new FileReader();
         fileReader.readAsDataURL(file);
-        fileReader.onloadend = (evt: any)=> {
+        fileReader.onloadend = (evt: any) => {
             if (evt.target.readyState !== FileReader.DONE) return;
             item.init(file.name, fileReader.result as string);
             this.resetLayer();
@@ -55,7 +56,8 @@ export class ObjectMgr {
         }
         return out;
     }
-    setSave(list:any[]) {
+
+    setSave(list: any[]) {
         this.objList = [];
         for (let i = 0; i < list.length; i++) {
             let item = list[i];
@@ -86,8 +88,8 @@ export class ObjectMgr {
         EventMgr.getIns().dispatchEvent(EventEnum.resetLayerList);
     }
 
-    findNode_text(node:Node, out:Node[] = null): Node[] {
-        if(!out) out = [];
+    findNode_text(node: Node, out: Node[] = null): Node[] {
+        if (!out) out = [];
         for (let i = 0; i < node.childNodes.length; i++) {
             if (node.childNodes.item(i).nodeType != 3 && node.childNodes.item(i).nodeType != 4) {
                 let child = node.childNodes.item(i);
@@ -103,12 +105,12 @@ export class ObjectMgr {
         return out;
     }
 
-    getRealTextPlaceholder(val:string) {
+    getRealTextPlaceholder(val: string) {
         let valArr = [];
         let valStr = val;
-        while(true) {
+        while (true) {
             let startIdx = valStr.indexOf("{{");
-            if(startIdx != -1) {
+            if (startIdx != -1) {
                 if (startIdx != 0) {
                     valArr.push({
                         type: "string",
@@ -119,54 +121,51 @@ export class ObjectMgr {
                 let endIdx = tmpValStr.indexOf("}}");
                 if (endIdx == 0) {
                     valArr.push({
-                        type:"string",
-                        val:"{{}}"
+                        type: "string",
+                        val: "{{}}"
                     });
                     valStr = tmpValStr.substring(endIdx + 2);
                 } else if (endIdx == -1) {
                     valArr.push({
-                        type:"string",
-                        val:"{{" + tmpValStr
+                        type: "string",
+                        val: "{{" + tmpValStr
                     });
                     break;
                 } else {
                     let placeholder = tmpValStr.substring(0, endIdx);
                     //被{{}}包裹的字符串
                     //内部有格式，可以设置为数字保留几位小数
-                    //内部用逗号分隔，{{F,num,2}}//这样则是数字保留两位小数
+                    //内部用逗号分隔，{{F,2}}//这样则是数字保留两位小数
                     let placeholderArr = placeholder.split(",");
-                    if(placeholderArr.length == 1){
+                    if (placeholderArr.length == 2) {
+                        let fix = parseInt(placeholderArr[1]);
+                        if (fix + "" == placeholderArr[1]) {
+                            valArr.push({
+                                type: "placeholder",
+                                val: placeholderArr[0],
+                                isNum: true,
+                                fixed: fix
+                            });
+                        } else {
+                            valArr.push({
+                                type: "placeholder",
+                                val: placeholder,
+                                isNum: false
+                            });
+                        }
+                    } else {
                         valArr.push({
                             type: "placeholder",
                             val: placeholder,
                             isNum: false
                         });
-                    } else {
-                        if(placeholderArr.length == 2) {
-                            valArr.push({
-                                type: "placeholder",
-                                val: placeholderArr[0],
-                                isNum: true,
-                                num: placeholderArr[1] == "num",
-                                fixed: 0
-                            });
-                        } else {
-                            valArr.push({
-                                type: "placeholder",
-                                val: placeholderArr[0],
-                                isNum: true,
-                                num: placeholderArr[1] == "num",
-                                fixed: parseInt(placeholderArr[2])
-                            });
-                        }
-
                     }
                     valStr = tmpValStr.substring(endIdx + 2);
                 }
-            } else if(valStr.length > 0) {
+            } else if (valStr.length > 0) {
                 valArr.push({
-                    type:"string",
-                    val:valStr
+                    type: "string",
+                    val: valStr
                 });
                 break;
             } else {
@@ -176,7 +175,7 @@ export class ObjectMgr {
         return valArr;
     }
 
-    getRealText(outData:any[], row:exceljs.Row) {
+    getRealText(outData: any[], row: exceljs.Row) {
         let out = "";
         for (let i = 0; i < outData.length; i++) {
             let item = outData[i];
@@ -184,8 +183,16 @@ export class ObjectMgr {
                 out += item.val;
             } else if (item.type == "placeholder") {
                 let val = row.getCell(item.val).value;
-                if(!val) {
-                    console.log("placeholder not found:", item.val, "row:",row.number);
+                if(!!val["result"]){
+                    val = val["result"];
+                }
+                if (item.isNum) {
+                    let fix = item.fixed;
+                    val = Math.floor(parseFloat(val + "") * Math.pow(10, item.fixed)) + "";
+                    val = val.substring(0, val.length - item.fixed) + "." + val.substring(val.length - item.fixed);
+                }
+                if (!val) {
+                    console.log("placeholder not found:", item.val, "row:", row.number);
                 }
                 out += val;
             }

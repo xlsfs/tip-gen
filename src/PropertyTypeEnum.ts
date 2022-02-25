@@ -23,5 +23,6 @@ export const PropertyTypeEnum = {
     out_excel_sheet: "out_excel_sheet",
     out_excel_startLine: "out_excel_startLine",
     out_excel_endLine: "out_excel_endLine",
+    out_file_name: "out_file_name",
 
 }

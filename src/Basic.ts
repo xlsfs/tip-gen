@@ -30,14 +30,19 @@ export class Basic {
     static get defaultEndLine () {
         return 99999;
     }
+    static get defaultSceneName () {
+        return "未命名";
+    }
+    static get defaultOutFileName () {
+        return "未命名";
+    }
     static excel_fileName = "";
-    static excel_workbook:exceljs.Workbook = null;
-    static excel_worksheet:exceljs.Worksheet = null;
     static excelImportObj = {
         sheetNo: 1,
         sheetName: "",
         startLine: Basic.defaultStartLine,
         endLine: Basic.defaultEndLine,
+        outFileName: Basic.defaultOutFileName,
     };
 
 }
