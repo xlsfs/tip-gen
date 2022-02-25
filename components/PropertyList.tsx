@@ -151,10 +151,12 @@ export default class PropertyList extends React.Component {
     onSceneTextHandleChange(textItem: any, type: string) {
         if (type == PropertyTypeEnum.scene_name) {
             let name = textItem.value;
-            SceneControls.getIns().sceneName = name;
-            this.setState({
-                prop_scene_width: SceneControls.getIns().sceneName
-            });
+            if(!!name) {
+                SceneControls.getIns().sceneName = name;
+                this.setState({
+                    prop_scene_name: SceneControls.getIns().sceneName
+                });
+            }
         } else if (type == PropertyTypeEnum.scene_width) {
             let sceneWidth = parseInt(textItem.value);
             if(sceneWidth > 1) {
