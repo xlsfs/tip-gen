@@ -69,4 +69,18 @@ export class TextObj extends _baseObj {
         };
     }
 
+    setSave(data:any) {
+        this.init(data.layerName, data.text);
+        this.svgItem.x(data.x);
+        this.svgItem.y(data.y);
+        this.svgItem.fill(data.color);
+        this.svgItem.font({
+            family: data.fontFamily,
+            size: data.fontSize
+        });
+        this.svgItem.attr({
+            "text-anchor": data.align
+        });
+    }
+
 }

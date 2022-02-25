@@ -17,7 +17,6 @@ import Canvg from 'canvg';
 import {SceneControls} from "../src/manager/SceneControls";
 import {Basic} from "../src/Basic";
 import AlertLay from '../components/AlertLay';
-import {Divider} from "@mui/material";
 
 const Home: NextPage = () => {
 
@@ -78,13 +77,21 @@ const Home: NextPage = () => {
                     console.log(fileReader.result);
                     try {
                         let json = JSON.parse(fileReader.result as string);
-                        if (json && json.scene && !!json.scene.attribute && !!json.scene.list) {
+                        if (json && json.scene) {
+
                             let attribute = json.scene.attribute;//场景属性
                             let list = json.scene.list;//场景内的元素列表
+                            if(!!attribute && !!list && list.length > 0) {
+                                let sceneControls = SceneControls.getIns();
+                                sceneControls.cleanScene();
+                                sceneControls.setSave(attribute, list);
+                            }
+                        } else {
+                            throw new Error("json格式错误");
                         }
                     } catch (e) {
                         console.log(e);
-                        alert("文件非法请重新选择");
+                        alert("文件格式错误请重新选择");
                     }
                 }
 
@@ -164,7 +171,6 @@ const Home: NextPage = () => {
         }
     };
 
-
     let outImageLogic = async (viewCopy: SVGSVGElement) => {
         let canvas = document.createElement('canvas');
         let ctx = canvas.getContext('2d');
@@ -206,7 +212,6 @@ const Home: NextPage = () => {
             alert("舞台上空无一物");
         }
     }
-
 
     // let layerListRef = React.createRef(); // ref={layerListRef}
 
