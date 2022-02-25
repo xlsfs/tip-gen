@@ -20,9 +20,7 @@ import List from '@mui/material/List';
 import Button from "@mui/material/Button";
 import Canvg from "canvg";
 import * as exceljs from "exceljs";
-import {useEffect} from "react";
 import {ExcelMgr} from "../src/manager/ExcelMgr";
-import {Divider} from "@mui/material";
 
 const FontList = dynamic(
     () => {
@@ -90,42 +88,6 @@ export default class PropertyList extends React.Component {
         EventMgr.getIns().add(EventEnum.changeSelectProperty, () => {
             this.changeSelProperty();
         }, Basic.EventObj_resetSelectList);
-    }
-
-    onChangeXlsFileInputHandler = this.onChangeXlsFileInput.bind(this);
-    onChangeXlsFileInput(e:any) {
-        // console.log(e.target);
-        if (e.target && e.target.files && e.target.files.length > 0) {
-            EventMgr.getIns().dispatchEvent(EventEnum.changeAlertShow);
-            // ObjectMgr.getIns().addImage(e.target.files[0]);
-            let fileReader = new FileReader();
-            let file = e.target.files[0];
-            fileReader.readAsArrayBuffer(file);
-            fileReader.onloadend = async (evt: any) => {
-                if (evt.target.readyState !== FileReader.DONE) return;
-                // e.target.files[0].name
-                Basic.excel_fileName = file.name;
-                await ExcelMgr.getIns().openExcel(fileReader.result as ArrayBuffer);
-                EventMgr.getIns().dispatchEvent(EventEnum.changeAlertShow_importExcel);
-            }
-        }
-        let xlsFileInput = document.getElementById("btn_loadExcelFile") as HTMLInputElement;
-        if(xlsFileInput) {
-            xlsFileInput.value = null;
-        }
-    }
-    componentDidMount() {
-
-        let xlsFileInput = document.getElementById("btn_loadExcelFile") as HTMLInputElement;
-        if(xlsFileInput) {
-            xlsFileInput.addEventListener('change', this.onChangeXlsFileInputHandler);
-        }
-    }
-    componentWillUnmount() {
-        let xlsFileInput = document.getElementById("btn_loadExcelFile") as HTMLInputElement;
-        if(xlsFileInput) {
-            xlsFileInput.removeEventListener('change', this.onChangeXlsFileInputHandler);
-        }
     }
 
     changeSelProperty() {
@@ -515,7 +477,7 @@ export default class PropertyList extends React.Component {
                 this.state.layerList.length == 0 &&
                 (<Grid
                     container
-                    direction="row"
+                    direction="column"
                     justifyContent="flex-start"
                     alignItems="flex-start"
                     spacing={1}
@@ -578,8 +540,11 @@ export default class PropertyList extends React.Component {
                         <input type="file" id="btn_loadExcelFile" style={{display: "none"}}
                                accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
                         <Button variant="contained" size="small" onClick={() => {
-                            let fileInput = document.getElementById("btn_loadExcelFile");
-                            fileInput.click();
+                            let xlsFileInput = document.getElementById("btn_loadExcelFile") as HTMLInputElement;
+                            if(xlsFileInput) {
+                                xlsFileInput.addEventListener('change', Basic.onChangeXlsFileInput);
+                                xlsFileInput.click();
+                            }
                         }}>载入数据表</Button>
                     </Grid>
                     <Grid item>
