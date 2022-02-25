@@ -1,4 +1,7 @@
 import * as exceljs from "exceljs";
+import {EventMgr} from "./manager/EventMgr";
+import {EventEnum} from "./events/EventEnum";
+import {ExcelMgr} from "./manager/ExcelMgr";
 
 export class Basic {
     static scale = 3.43;
@@ -44,5 +47,30 @@ export class Basic {
         endLine: Basic.defaultEndLine,
         outFileName: Basic.defaultOutFileName,
     };
+
+
+    static onChangeXlsFileInput(e:any) {
+        // console.log(e.target);
+        if (e.target && e.target.files && e.target.files.length > 0) {
+            EventMgr.getIns().dispatchEvent(EventEnum.changeAlertShow);
+            // ObjectMgr.getIns().addImage(e.target.files[0]);
+            let fileReader = new FileReader();
+            let file = e.target.files[0];
+            fileReader.readAsArrayBuffer(file);
+            fileReader.onloadend = async (evt: any) => {
+                if (evt.target.readyState !== FileReader.DONE) return;
+                // e.target.files[0].name
+                Basic.excel_fileName = file.name;
+                await ExcelMgr.getIns().openExcel(fileReader.result as ArrayBuffer);
+                EventMgr.getIns().dispatchEvent(EventEnum.changeAlertShow_importExcel);
+            }
+        }
+        let xlsFileInput = document.getElementById("btn_loadExcelFile") as HTMLInputElement;
+        if(xlsFileInput) {
+            xlsFileInput.value = null;
+        }
+    }
+
+
 
 }
