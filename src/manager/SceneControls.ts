@@ -277,6 +277,19 @@ export class SceneControls {
         }
         return out;
     }
+    
+    cleanScene() {
+        this.cleanAllSel();
+        let objList = ObjectMgr.getIns().objList;
+        objList.length = 0;
+    }
+
+    setSave(attribute:any, list:any[]) {
+        this.sceneName = attribute.name;
+        this.view_width = attribute.view.width;
+        this.view_height = attribute.view.height;
+        ObjectMgr.getIns().setSave(list);
+    }
 
     // getIntersections(event:MouseEvent ) {
     //     let objects = ObjectMgr.getIns().objList;

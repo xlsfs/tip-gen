@@ -1,11 +1,7 @@
-
 import {Svg, Image, SVG, namespaces} from "@svgdotjs/svg.js";
-import { Basic } from "../Basic";
-import { EventEnum } from "../events/EventEnum";
-import { EventMgr } from "../manager/EventMgr";
-import { SceneControls } from "../manager/SceneControls";
-import { ObjStateEnum } from "./state/ObjStateEnum";
-import { _baseObj } from "./_baseObj";
+import {SceneControls} from "../manager/SceneControls";
+import {ObjStateEnum} from "./state/ObjStateEnum";
+import {_baseObj} from "./_baseObj";
 
 export class ImageObj extends _baseObj {
 
@@ -15,6 +11,9 @@ export class ImageObj extends _baseObj {
     public svgItem: Svg;
     public image: Image;
     public imageData: string;
+
+    private vboxWidth: number;
+    private vboxHeight: number;
 
     constructor() {
         super("image");
@@ -40,9 +39,14 @@ export class ImageObj extends _baseObj {
         this.image.load(src, (event: Event) => {
             let ww = this.image.width() as number;
             let hh = this.image.height() as number;
+
+            this.vboxWidth = ww;
+            this.vboxHeight = hh;
+
             this.svgItem.width(ww);
             this.svgItem.height(hh);
-            this.svgItem.viewbox( {
+
+            this.svgItem.viewbox({
                 x: 0,
                 y: 0,
                 width: ww,
@@ -59,7 +63,7 @@ export class ImageObj extends _baseObj {
         // };
     }
 
-    getSave():any {
+    getSave(): any {
 
         return {
             type: this.type,
@@ -68,6 +72,9 @@ export class ImageObj extends _baseObj {
             x: this.svgItem.x(),
             y: this.svgItem.y(),
 
+            vboxWidth: this.vboxWidth,
+            vboxHeight: this.vboxHeight,
+
             width: this.svgItem.width(),
             height: this.svgItem.height(),
 
@@ -75,44 +82,42 @@ export class ImageObj extends _baseObj {
         };
     }
 
-    // loadedImageComplete() {
-    // // this.image.width;
-    // // this.image.height;
-    // this.texture = new Texture();
-    // this.texture.image = this.image;
-    // this.texture.needsUpdate = true;
-    // // this.texture = new TextureLoader().load("https://r105.threejsfundamentals.org/threejs/resources/images/wall.jpg");
-    // let geo = new BufferGeometry();
-    // geo.attributes.position = new BufferAttribute(new Float32Array([
-    //     -.5, 0, .5, // 0
-    //     .5, 0, .5, // 1
-    //     .5, 0, -.5, // 2
-    //     -.5, 0, -.5, // 3
-    // ]), 3);
-    // geo.attributes.uv = new BufferAttribute(new Uint16Array([0, 0, 1, 0, 1, 1, 0, 1]), 2);
-    // geo.index = new BufferAttribute(new Uint16Array([0, 1, 2, 0, 2, 3]), 1);
-    // this.model = new Mesh(geo,
-    //     new MeshBasicMaterial({
-    //         map: this.texture,
-    //         transparent: true,
-    //         // opacity: .5
-    //         // vertexColors: true
-    //     })
-    // );
-    // var edges = new EdgesGeometry(geo, Basic.DEFAULT_EDGES_THRESHOLD_ANGLE);
-    // this.wireframe = EdgesUtils.createWireframeFromEdgesGeometry(edges, {
-    //     color: Basic.COLOR_HOVERON_WIREFRAME_BOX,
-    //     depthTest: false
-    // });
-    // this.wireframe.name = 'wireframeBox';
-    // this.wireframe.visible = false;
-    // let scale = Basic.DEFAULT_UNIT_LENGTH_p;
-    // this.model.scale.set(this.image.width / scale, 1, this.image.height / scale);
-    // this.add(this.model);
-    // this.wireframe.scale.set(this.image.width / scale, 1, this.image.height / scale);
-    // this.add(this.wireframe);
-    // console.log(this.model.scale, scale);
-    // }
+    setSave(data: any) {
+        this.layerName = data.layerName;
+
+        this.svgItem.x(data.x);
+        this.svgItem.y(data.y);
+
+        this.svgItem.width(data.width);
+        this.svgItem.height(data.height);
+
+        this.svgItem.viewbox({
+            x: 0,
+            y: 0,
+            width: data.vboxWidth,
+            height: data.vboxHeight
+        });
+
+        this.imageData = data.image;
+
+        this.image.load(this.imageData, (event: Event) => {
+            let ww = this.image.width() as number;
+            let hh = this.image.height() as number;
+
+            this.vboxWidth = ww;
+            this.vboxHeight = hh;
+
+            this.svgItem.width(ww);
+            this.svgItem.height(hh);
+
+            this.svgItem.viewbox({
+                x: 0,
+                y: 0,
+                width: ww,
+                height: hh
+            });
+        });
+    }
 }
 
 // geo.attributes.color = new BufferAttribute(new Float32Array([

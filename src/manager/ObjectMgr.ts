@@ -17,7 +17,7 @@ export class ObjectMgr {
     }
 
     constructor() {
-        console.log(this);
+        // console.log(this);
     }
 
     public objList: _baseObj[] = [];
@@ -54,6 +54,24 @@ export class ObjectMgr {
             out.push(this.objList[i].getSave());
         }
         return out;
+    }
+    setSave(list:any[]) {
+        this.objList = [];
+        for (let i = 0; i < list.length; i++) {
+            let item = list[i];
+            let obj = null;
+            if (item.type == "image") {
+                obj = new ImageObj();
+            } else if (item.type == "text") {
+                obj = new TextObj();
+            }
+            obj.setSave(item);
+            this.objList.push(obj);
+        }
+
+        SceneControls.getIns().cleanAllSel();
+        this.resetLayer();
+        EventMgr.getIns().dispatchEvent(EventEnum.resetSelectList_scene2layout);
     }
 
     resetLayer() {

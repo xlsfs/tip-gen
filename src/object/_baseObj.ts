@@ -46,4 +46,8 @@ export class _baseObj  {
     getSave():any {
         return null;
     }
+
+    setSave(data:any) {
+
+    }
 }
