@@ -160,6 +160,10 @@ export default function PropertyItem_scene() {
             }
         }
         let outFileNameData = ObjectMgr.getIns().getRealTextPlaceholder(Basic.excelImportObj.outFileName);
+        if(!Basic.outCanvas) {
+            Basic.outCanvas = document.createElement('canvas');
+        }
+        document.body.appendChild(Basic.outCanvas);
         for (let l = Basic.excelImportObj.startLine; l <= totalLine; l++) {
             let row = worksheet.getRow(l);
 
@@ -173,12 +177,12 @@ export default function PropertyItem_scene() {
             }
             await outImageLogic(viewCopy.node, outFileNameData, row);
         }
+        Basic.outCanvas.remove();
     };
 
     let outImageLogic = async (viewCopy: SVGSVGElement, outFileNameData:any, row: exceljs.Row) => {
-        let canvas = document.createElement('canvas');
+        let canvas = Basic.outCanvas;
         let ctx = canvas.getContext('2d');
-        document.body.appendChild(canvas);
 
         let v = await Canvg.from(ctx, viewCopy.outerHTML);
 

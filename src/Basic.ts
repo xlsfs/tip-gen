@@ -71,9 +71,7 @@ export class Basic {
         }
     }
 
-
-
-    static changSelectProperty:boolean = true;
+    static outCanvas:HTMLCanvasElement = null;
 
 
 }
