@@ -32,6 +32,12 @@
   width: 220px;
   background-color: #a7dfff;
 }
+.container_left_bottom {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+
+}
 .container_bottom {
   position: absolute;
   bottom: 0;
