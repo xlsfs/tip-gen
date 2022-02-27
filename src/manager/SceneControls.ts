@@ -158,6 +158,7 @@ export class SceneControls {
                 // console.log("onMouseMove",item.svgItem.beforePosX - chaX,item.svgItem.x());
                 // console.log("onMouseMove",item.svgItem.beforePosY - chaY,item.svgItem.y());
             }
+            Basic.changSelectProperty = true;
             EventMgr.getIns().dispatchEvent(EventEnum.changeSelectProperty);
         } else {//拖动舞台
 
@@ -247,6 +248,7 @@ export class SceneControls {
     }
 
     onResetSelectList(selItems: any[]) {
+        console.log("EventEnum.resetSelectList_layer2scene onResetSelectList", selItems);
         if (this.selected.length > 0) {
             for (let i = 0; i < this.selected.length; i++) {
                 let item = this.selected[i];
@@ -291,23 +293,6 @@ export class SceneControls {
         this.view_height = attribute.view.height;
         ObjectMgr.getIns().setSave(list);
     }
-
-    // getIntersections(event:MouseEvent ) {
-    //     let objects = ObjectMgr.getIns().objList;
-    //     let rect = this.dom.getBoundingClientRect();
-    //     this.mouse.x = ( event.clientX / rect.width ) * 2 - 1;
-    //     this.mouse.y = - ( event.clientY / rect.height ) * 2 + 1;
-    //     this.raycaster.setFromCamera( this.mouse, this.camera );
-    //     const intersections = this.raycaster.intersectObjects( objects, false );
-    //     if ( intersections.length > 0 ) {
-    //         intersections.sort((a:any, b:any)=>{
-    //             var distance = a.distance - b.distance;
-    //             return distance;
-    //         });
-    //         return intersections[0];
-    //     }
-    //     return null;
-    // }
 
     resize() {
         // this.scene.width(this.dom.clientWidth);

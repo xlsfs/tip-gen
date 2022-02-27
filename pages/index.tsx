@@ -19,6 +19,7 @@ import * as exceljs from "exceljs";
 import * as sheetjs from "xlsx";
 
 const Home: NextPage = () => {
+    let verStr = "0.0.2";
 
     useEffect(() => {
         // @ts-ignore
@@ -198,6 +199,12 @@ const Home: NextPage = () => {
 
                     </Grid>
                 </Grid>
+            </div>
+
+            <div className={styles.container_left_bottom}>
+                <div>
+                    <span>v{verStr}</span>
+                </div>
             </div>
 
             {/*<div className={styles.container_bottom}>*/}

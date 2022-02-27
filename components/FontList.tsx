@@ -27,7 +27,9 @@ export default class FontList extends React.Component<{
 
         EventMgr.getIns().removeByCaller(EventEnum.changeFontFamily, Basic.EventObj_fontList);
         EventMgr.getIns().add(EventEnum.changeFontFamily, (font: string) => {
-            this.setState({selVal: font});
+            if(this.state.selVal != font) {
+                this.setState({selVal: font});
+            }
         }, Basic.EventObj_fontList);
     }
 
