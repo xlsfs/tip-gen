@@ -17,6 +17,7 @@ import {Basic} from "../src/Basic";
 import AlertLay from '../components/AlertLay';
 import * as exceljs from "exceljs";
 import * as sheetjs from "xlsx";
+import {FontMgr} from "../src/manager/FontMgr";
 
 const Home: NextPage = () => {
     let verStr = "0.0.2";
@@ -28,6 +29,8 @@ const Home: NextPage = () => {
         window.sceneControls = SceneControls.getIns();
         // @ts-ignore
         window.objectMgr = ObjectMgr.getIns();
+        // @ts-ignore
+        window.fontMgr = FontMgr.getIns();
         // @ts-ignore
         window.sheetjs = sheetjs;
         // @ts-ignore
