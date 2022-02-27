@@ -71,6 +71,7 @@ export class Basic {
         }
     }
 
+    static outCanvas:HTMLCanvasElement = null;
 
 
 }

@@ -382,16 +382,20 @@ export class FontMgr {
 
         let result: {font:string, en:string, cn:string}[] = [];
         let i = 0;
+        let checkObj = {};
         for(let key in this.dataFont) {
             let arrFont = this.dataFont[key];
             arrFont.forEach((obj:any) => {
                 let fontFamily = obj.en;
-                if (this.isSupportFontFamily(fontFamily)) {
-                    result[i++] = {
-                        font: fontFamily,
-                        en: obj.en,
-                        cn: obj.ch
-                    };
+                if(!checkObj[fontFamily]) {
+                    checkObj[fontFamily] = true;
+                    if (this.isSupportFontFamily(fontFamily)) {
+                        result[i++] = {
+                            font: fontFamily,
+                            en: obj.en,
+                            cn: obj.ch
+                        };
+                    }
                 }
             });
         }
