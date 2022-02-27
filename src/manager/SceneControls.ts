@@ -158,7 +158,6 @@ export class SceneControls {
                 // console.log("onMouseMove",item.svgItem.beforePosX - chaX,item.svgItem.x());
                 // console.log("onMouseMove",item.svgItem.beforePosY - chaY,item.svgItem.y());
             }
-            Basic.changSelectProperty = true;
             EventMgr.getIns().dispatchEvent(EventEnum.changeSelectProperty);
         } else {//拖动舞台
 
