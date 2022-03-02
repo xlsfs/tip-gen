@@ -43,17 +43,17 @@ export class SceneControls {
 
     public _sceneName = Basic.defaultSceneName;
     public get sceneName() {
-        if(!!this._sceneName) {
+        if(!this._sceneName) {
             this._sceneName = Basic.defaultSceneName;
         }
         return this._sceneName;
     }
     public set sceneName(name) {
-        if (!!name) {
+        if (!name) {
             name = Basic.defaultSceneName;
         }
         name = name.trim();
-        if (!!name) {
+        if (!name) {
             name = Basic.defaultSceneName;
         }
         this._sceneName = name;
