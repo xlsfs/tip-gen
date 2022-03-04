@@ -14,4 +14,6 @@ export const EventEnum = {
 
     changeAlertShow: "changeAlertShow",
     changeAlertShow_importExcel: "changeAlertShow_importExcel",
+    changeAlertShow_outImage: "changeAlertShow_outImage",
+    changeAlertShow_outImage_progress: "changeAlertShow_outImage_progress",
 }

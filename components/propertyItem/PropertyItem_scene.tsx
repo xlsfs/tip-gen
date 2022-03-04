@@ -9,6 +9,9 @@ import {SceneControls} from "../../src/manager/SceneControls";
 import {ObjectMgr} from "../../src/manager/ObjectMgr";
 import * as exceljs from "exceljs";
 import Canvg from "canvg";
+import {OutMgr} from "../../src/manager/OutMgr";
+import {EventMgr} from "../../src/manager/EventMgr";
+import {EventEnum} from "../../src/events/EventEnum";
 
 export default function PropertyItem_scene() {
     const [prop_scene_name, setProp_scene_name] = React.useState(SceneControls.getIns().sceneName);
@@ -104,7 +107,7 @@ export default function PropertyItem_scene() {
         }
 
 
-        let r = confirm("是否确定要输出图片？文件名为" + Basic.excelImportObj.outFileName);
+        let r = confirm("是否确定要输出图片？文件名为 【" + Basic.excelImportObj.outFileName+"】");
         if (r == true) {
         } else {
             return;
@@ -129,77 +132,7 @@ export default function PropertyItem_scene() {
         viewCopy.x(0);
         viewCopy.y(0);
 
-        let nodeArr = objectMgr.findNode_text(viewCopy.node);
-        console.log(nodeArr);
-        let textNodeObj = [];
-        for (let i = 0; i < nodeArr.length; i++) {
-            let textNode = nodeArr[i] as any;
-            let outData = objectMgr.getRealTextPlaceholder(textNode.innerHTML);
-            if(!outData || outData.length == 0) {
-                debugger;
-                outData = objectMgr.getRealTextPlaceholder(textNode.innerHTML);
-            }
-            // let needCell = [];
-            // for(let j = 0; j < outData.length; j ++) {
-            //   if(outData[j].type) {
-            //     needCell.push(outData[j].val);
-            //   }
-            // }
-            textNodeObj[i] = {node: textNode, data: outData};//, needCell: needCell};
-            console.log(outData);
-        }
-
-
-        let worksheet = ExcelMgr.getIns().getWorksheet();
-        let totalLine = worksheet.rowCount;
-        if (totalLine > Basic.excelImportObj.endLine) {
-            totalLine = Basic.excelImportObj.endLine;
-            if (totalLine < Basic.excelImportObj.startLine) {
-                alert("导入的excel文件数据不足");
-                return;
-            }
-        }
-        let outFileNameData = ObjectMgr.getIns().getRealTextPlaceholder(Basic.excelImportObj.outFileName);
-        if(!Basic.outCanvas) {
-            Basic.outCanvas = document.createElement('canvas');
-        }
-        document.body.appendChild(Basic.outCanvas);
-        for (let l = Basic.excelImportObj.startLine; l <= totalLine; l++) {
-            let row = worksheet.getRow(l);
-
-            for (let i = 0; i < textNodeObj.length; i++) {
-                let outData = textNodeObj[i];
-                let textNode = outData.node;
-                let data = outData.data;
-
-                // let needCell = outData.needCell;
-                textNode.innerHTML = objectMgr.getRealText(data, row);
-            }
-            await outImageLogic(viewCopy.node, outFileNameData, row);
-        }
-        Basic.outCanvas.remove();
-    };
-
-    let outImageLogic = async (viewCopy: SVGSVGElement, outFileNameData:any, row: exceljs.Row) => {
-        let canvas = Basic.outCanvas;
-        let ctx = canvas.getContext('2d');
-
-        let v = await Canvg.from(ctx, viewCopy.outerHTML);
-
-        await v.render();
-        let MIME_TYPE = "image/png";
-        let imgURL = canvas.toDataURL(MIME_TYPE);
-        let dlLink = document.createElement('a');
-
-        let downloadName = ObjectMgr.getIns().getRealText(outFileNameData, row);
-
-        dlLink.download = downloadName+".png";
-        dlLink.href = imgURL;
-        dlLink.dataset.downloadurl = [MIME_TYPE, dlLink.download, dlLink.href].join(':');
-
-        document.body.appendChild(dlLink);
-        dlLink.click();
-        document.body.removeChild(dlLink);
+        await OutMgr.outImageLogic(viewCopy);
 
     };
 
