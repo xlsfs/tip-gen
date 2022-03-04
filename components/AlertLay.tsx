@@ -17,6 +17,11 @@ export default class AlertLay extends React.Component {
         this.state = {
             alertShow: false,
             importExcelShow: false,
+            outImageShow: false,
+
+            outImage_total: 0,
+            outImage_current: 0,
+            outImage_complete: false,
         };
 
         EventMgr.getIns().removeByCaller(EventEnum.changeAlertShow, Basic.EventObj_alert);
@@ -28,18 +33,56 @@ export default class AlertLay extends React.Component {
         EventMgr.getIns().add(EventEnum.changeAlertShow_importExcel, () => {
             this.setImportExcelShow(true);
         }, Basic.EventObj_alert);
+
+        EventMgr.getIns().removeByCaller(EventEnum.changeAlertShow_outImage, Basic.EventObj_alert);
+        EventMgr.getIns().add(EventEnum.changeAlertShow_outImage, () => {
+            this.setOutImageShow(true);
+        }, Basic.EventObj_alert);
+
+        EventMgr.getIns().removeByCaller(EventEnum.changeAlertShow_outImage_progress, Basic.EventObj_alert);
+        EventMgr.getIns().add(EventEnum.changeAlertShow_outImage_progress, () => {
+            this.setState({
+                outImage_total: Basic.outImageProgress.total,
+                outImage_current: Basic.outImageProgress.current,
+                outImage_complete: Basic.outImageProgress.complete,
+            });
+        }, Basic.EventObj_alert);
     }
 
     setAlertShow(value: boolean) {
         this.setState({
             alertShow: value
-        })
+        });
+        if(value) {
+            this.setState({
+                importExcelShow: false,
+                outImageShow: false
+            });
+
+        }
     }
 
     setImportExcelShow(value: boolean) {
         this.setState({
-            importExcelShow: value
+            importExcelShow: value,
+            outImageShow: !value
+        });
+        if(value) {
+            this.setState({
+                outImageShow: false
+            });
+        }
+    }
+
+    setOutImageShow(value: boolean) {
+        this.setState({
+            outImageShow: value
         })
+        if(value) {
+            this.setState({
+                importExcelShow: false
+            });
+        }
     }
 
     submitImportExcel (ok:boolean) {
@@ -83,6 +126,12 @@ export default class AlertLay extends React.Component {
             this.setImportExcelShow(false);
         }
     }
+
+    submitOutImage (ok:boolean) {
+        this.setAlertShow(false);
+        this.setOutImageShow(false);
+    }
+
     render() {
         return (<>
 
@@ -169,6 +218,67 @@ export default class AlertLay extends React.Component {
                         </Grid>
                     </Grid>
 
+                </div>
+                <div className={this.state.outImageShow?styles.alert_importExcel_show:styles.alert_importExcel_hide}>
+                    <Grid
+                        container
+                        direction="column"
+                        justifyContent="flex-start"
+                        alignItems="flex-start"
+                        spacing={1}
+                        p={1}>
+                        <Grid item>
+                            <p style={{margin: 0}}>图片导出中...</p>
+                            <p></p>
+                        </Grid>
+                        <Grid item>
+                            <table style={{
+                                "borderCollapse": "collapse",
+                                "border":"1px solid #ccc",
+                            }}>
+                                <tbody>
+                                <tr style={{
+                                    "alignItems": "center",
+                                }}>
+                                    <th>总公共需要处理：</th>
+                                    <td>{this.state.outImage_total}</td>
+                                    <td>条记录</td>
+                                </tr>
+                                <tr style={{
+                                    "alignItems": "center",
+                                }}>
+                                    <th>已处理：</th>
+                                    <td>{this.state.outImage_current}</td>
+                                    <td>条记录</td>
+                                </tr>
+                                <tr style={{
+                                    "alignItems": "center",
+                                }}>
+                                    <th>剩余：</th>
+                                    <td>{this.state.outImage_total-this.state.outImage_current}</td>
+                                    <td>条记录待处理</td>
+                                </tr>
+                                <tr style={{
+                                    "alignItems": "center",
+                                }}>
+                                    <th>状态：</th>
+                                    <th>{this.state.outImage_complete?"完成":"处理中"}</th>
+                                    <th></th>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <p></p>
+                        </Grid>
+                        <Grid item>
+                            <Button variant="contained" size="small" style={{margin:10}} onClick={() => {
+                                if(this.state.outImage_complete) {
+                                    this.submitOutImage(false);
+                                } else {
+                                    alert("请稍后还未完成导出！");
+                                }
+                            }}>关闭</Button>
+                        </Grid>
+                    </Grid>
                 </div>
             </div>
         </>);

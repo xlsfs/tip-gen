@@ -191,7 +191,7 @@ export class ObjectMgr {
                     val = Math.floor(parseFloat(val + "") * Math.pow(10, item.fixed)) + "";
                     val = val.substring(0, val.length - item.fixed) + "." + val.substring(val.length - item.fixed);
                 }
-                if (!val) {
+                if (!(val+"")) {
                     console.log("placeholder not found:", item.val, "row:", row.number);
                 }
                 out += val;

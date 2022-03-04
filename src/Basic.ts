@@ -1,9 +1,12 @@
-import * as exceljs from "exceljs";
 import {EventMgr} from "./manager/EventMgr";
 import {EventEnum} from "./events/EventEnum";
 import {ExcelMgr} from "./manager/ExcelMgr";
 
 export class Basic {
+
+    static zipMode = true;
+    static zipPackLimit = 100;
+
     static scale = 3.43;
 
     // static DEFAULT_UNIT_IN_METERS = 1; // 以米为单位
@@ -72,6 +75,13 @@ export class Basic {
     }
 
     static outCanvas:HTMLCanvasElement = null;
+
+    static outImageProgress = {
+        total: 0,
+        current: 0,
+        zipList: [] as any[],
+        complete: false,
+    };
 
 
 }
