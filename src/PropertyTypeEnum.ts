@@ -10,6 +10,8 @@ export const PropertyTypeEnum = {
     pos_x: "pos_x",
     pos_y: "pos_y",
 
+    rotate_x: "rotate_x",
+
     img_width: "img_width",
     img_height: "img_height",
 

@@ -265,7 +265,7 @@ export default class LayerList extends React.Component {
                     border: '1px solid #aaa',
                     position: 'relative',
                     overflow: 'auto',
-                    maxHeight: "300px",
+                    maxHeight: "250px",
                 }}
             >
                 {this.state.layerList.map((item: _baseObj, index: number, array: any[]) => (
