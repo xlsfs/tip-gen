@@ -7,6 +7,7 @@ import {Svg} from "@svgdotjs/svg.js";
 import JSZip from "jszip";
 import {EventMgr} from "./EventMgr";
 import {EventEnum} from "../events/EventEnum";
+import {SceneControls} from "./SceneControls";
 
 export class OutMgr {
 
@@ -91,7 +92,7 @@ export class OutMgr {
                     zipObj.end = l - 1;
 
                     await OutMgr.downloadZip(zipObj.zip,
-                        Basic.excelImportObj.outFileName + "_" + zipObj.start + "_" + zipObj.end + ".zip"
+                        SceneControls.getIns().sceneName + "_" + zipObj.start + "_" + zipObj.end + ".zip"
                     );
 
                     zipObj = getNewZip(l);
@@ -110,7 +111,7 @@ export class OutMgr {
             if(zipObj.count > 0) {
                 zipObj.end = l - 1;
                 await OutMgr.downloadZip(zipObj.zip,
-                    Basic.excelImportObj.outFileName + "_" + zipObj.start + "_" + zipObj.end + ".zip"
+                    SceneControls.getIns().sceneName + "_" + zipObj.start + "_" + zipObj.end + ".zip"
                 );
             } else {
                 // zipObj.zip.end();

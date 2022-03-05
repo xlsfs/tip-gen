@@ -24,6 +24,7 @@
   top: 40px;
   width: 250px;
   background-color: #cfffc6;
+  z-index: 10;
 }
 .container_right_bottom {
   position: absolute;
@@ -31,6 +32,7 @@
   bottom: 0;
   width: 220px;
   background-color: #a7dfff;
+  z-index: 9;
 }
 .container_left_bottom {
   position: absolute;

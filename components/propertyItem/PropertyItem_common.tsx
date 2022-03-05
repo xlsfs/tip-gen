@@ -8,6 +8,18 @@ export default function PropertyItem_common() {
     const [prop_pos_x, setProp_pos_x] = React.useState(0);
     const [prop_pos_y, setProp_pos_y] = React.useState(0);
 
+    const [prop_rot_x, setProp_rot_x] = React.useState(0);
+
+    let clampRotate = (rotate: number) => {
+        while (rotate > 180) {
+            rotate = rotate - 360;
+        }
+        while (rotate < -180) {
+            rotate = rotate + 360;
+        }
+        return rotate;//Math.floor(rotate * 100) / 100;
+    };
+
     let onTextHandleChange = (textItem: any, type: string) => {
         let chaProp: any = {};
 
@@ -16,16 +28,24 @@ export default function PropertyItem_common() {
             let selItem = objects[0];
 
             if (type == PropertyTypeEnum.pos_x) {
-                chaProp.x = parseFloat(textItem.value) - (selItem.svgItem.x() as number);
+                chaProp.x = textItem.value - (selItem.svgItem.x() as number);
                 for (let i = 0; i < objects.length; i++) {
                     let item = objects[i];
                     item.svgItem.x(chaProp.x + (item.svgItem.x() as number));
                 }
             } else if (type == PropertyTypeEnum.pos_y) {
-                chaProp.y = parseFloat(textItem.value) - (selItem.svgItem.y() as number);
+                chaProp.y = textItem.value - (selItem.svgItem.y() as number);
                 for (let i = 0; i < objects.length; i++) {
                     let item = objects[i];
                     item.svgItem.y(chaProp.y + (item.svgItem.y() as number));
+                }
+            } else if (type == PropertyTypeEnum.rotate_x) {
+                chaProp.rotX = textItem.value - selItem.svgItem.transform().rotate;
+                for (let i = 0; i < objects.length; i++) {
+                    let item = objects[i];
+                    item.svgItem.transform({ rotate:
+                        clampRotate(chaProp.rotX + item.svgItem.transform().rotate)
+                    });
                 }
             }
 
@@ -38,10 +58,16 @@ export default function PropertyItem_common() {
         if (objects && objects[0]) {
             let selItem = objects[0];
             if(prop_pos_x != selItem.svgItem.x()){
-                setProp_pos_x(selItem.svgItem.x() as number);
+                setProp_pos_x(Math.round((selItem.svgItem.x() as number) * 1000) / 1000);
             }
             if(prop_pos_y != selItem.svgItem.y()){
-                setProp_pos_y(selItem.svgItem.y() as number);
+                setProp_pos_y(Math.round((selItem.svgItem.y() as number) * 1000) / 1000);
+            }
+            if(prop_rot_x != selItem.svgItem.transform().rotate){
+                let rotX = selItem.svgItem.transform().rotate;
+                rotX = clampRotate(rotX);
+                rotX = Math.round(rotX * 1000) / 1000;
+                setProp_rot_x( rotX);
             }
         }
     };
@@ -96,3 +122,24 @@ export default function PropertyItem_common() {
         </Grid>
     </Grid>)
 }
+/*
+
+        <Grid item>
+            <TextField
+                id={PropertyTypeEnum.rotate_x}
+                value={prop_rot_x}
+                hiddenLabel
+                size="small"
+                variant="standard"
+                InputProps={{
+                    startAdornment: (
+                        <span style={{width: "100px"}}>旋转:</span>
+                    )
+                }}
+                onChange={(event) => {
+                    onTextHandleChange(event.target, PropertyTypeEnum.rotate_x);
+                }}
+            />
+        </Grid>
+
+ */

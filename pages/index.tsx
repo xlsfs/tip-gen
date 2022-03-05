@@ -20,7 +20,7 @@ import * as sheetjs from "xlsx";
 import {FontMgr} from "../src/manager/FontMgr";
 
 const Home: NextPage = () => {
-    let verStr = "0.0.3";
+    let verStr = "0.0.4";
 
     useEffect(() => {
         // @ts-ignore
