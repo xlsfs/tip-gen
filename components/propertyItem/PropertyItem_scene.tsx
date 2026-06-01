@@ -11,8 +11,11 @@ import * as exceljs from "exceljs";
 import {OutMgr} from "../../src/manager/OutMgr";
 import {EventMgr} from "../../src/manager/EventMgr";
 import {EventEnum} from "../../src/events/EventEnum";
+import {useTranslation} from "next-i18next/pages";
 
 export default function PropertyItem_scene() {
+    const {t} = useTranslation('common');
+
     const [prop_scene_name, setProp_scene_name] = React.useState(SceneControls.getIns().sceneName);
 
     const [prop_scene_width, setProp_scene_width] = React.useState(SceneControls.getIns().view_width);
@@ -101,12 +104,12 @@ export default function PropertyItem_scene() {
     let outImage = async () => {
 
         if (!ExcelMgr.getIns().excelJs_workbook || !ExcelMgr.getIns().excelJs_worksheet) {
-            alert("请先导入excel文件");
+            alert(t("importExcelFirst"));
             return;
         }
 
 
-        let r = confirm("是否确定要输出图片？文件名为 【" + Basic.excelImportObj.outFileName+"】");
+        let r = confirm(t("confirmOutputImages", {name: Basic.excelImportObj.outFileName}));
         if (r == true) {
         } else {
             return;
@@ -207,7 +210,7 @@ export default function PropertyItem_scene() {
                 slotProps={{
                     input: {
                         startAdornment: (
-                        <span style={{width: "100px"}}>名字:</span>
+                        <span style={{width: "100px"}}>{t("name")}</span>
                         )
                     }
                 }}
@@ -217,7 +220,7 @@ export default function PropertyItem_scene() {
             />
         </Grid>
         <Grid item>
-            <p style={{margin:0}}>舞台尺寸(像素)</p>
+            <p style={{margin:0}}>{t("stageSize")}</p>
         </Grid>
         <Grid item>
             <TextField
@@ -229,7 +232,7 @@ export default function PropertyItem_scene() {
                 slotProps={{
                     input: {
                         startAdornment: (
-                        <span style={{width: "100px"}}>宽:</span>
+                        <span style={{width: "100px"}}>{t("width")}</span>
                         )
                     }
                 }}
@@ -248,7 +251,7 @@ export default function PropertyItem_scene() {
                 slotProps={{
                     input: {
                         startAdornment: (
-                        <span style={{width: "100px"}}>高:</span>
+                        <span style={{width: "100px"}}>{t("height")}</span>
                         )
                     }
                 }}
@@ -266,26 +269,26 @@ export default function PropertyItem_scene() {
                     xlsFileInput.addEventListener('change', Basic.onChangeXlsFileInput);
                     xlsFileInput.click();
                 }
-            }}>载入数据表</Button>
+            }}>{t("loadDataSheet")}</Button>
         </Grid>
         <Grid item>
-            <p style={{margin:0}}>Excel文件信息</p>
+            <p style={{margin:0}}>{t("excelFileInfo")}</p>
         </Grid>
 
         {(!ExcelMgr.getIns().excelJs_workbook || !ExcelMgr.getIns().excelJs_worksheet) && (
-            <Grid item><p style={{margin:2}}>未选择Excel文件</p></Grid>
+            <Grid item><p style={{margin:2}}>{t("noExcelFile")}</p></Grid>
         )}
 
         {(ExcelMgr.getIns().excelJs_workbook && ExcelMgr.getIns().excelJs_worksheet) && (<>
             <Grid item>
                 <p style={{margin:0}}>
-                    工作簿: {prop_out_excel_fileName}
+                    {t("workbook")}: {prop_out_excel_fileName}
                     <br/>
-                    工作表: {prop_out_excel_sheetName}
+                    {t("worksheet")}: {prop_out_excel_sheetName}
                 </p>
             </Grid>
             <Grid item>
-                <p style={{margin: 0}}>工作表编号，从1开始</p>
+                <p style={{margin: 0}}>{t("worksheetNumber")}</p>
             </Grid>
             <Grid item>
                 <TextField
@@ -300,7 +303,7 @@ export default function PropertyItem_scene() {
                 />
             </Grid>
             <Grid item>
-                <p style={{margin: 0}}>数据起始行</p>
+                <p style={{margin: 0}}>{t("startLine")}</p>
             </Grid>
             <Grid item>
                 <TextField
@@ -315,7 +318,7 @@ export default function PropertyItem_scene() {
                 />
             </Grid>
             <Grid item>
-                <p style={{margin: 0}}>数据结束行</p>
+                <p style={{margin: 0}}>{t("endLine")}</p>
             </Grid>
             <Grid item>
                 <TextField
@@ -330,7 +333,7 @@ export default function PropertyItem_scene() {
                 />
             </Grid>
             <Grid item>
-                <p style={{margin: 0}}><br/>输出文件名</p>
+                <p style={{margin: 0}}><br/>{t("outputFileName")}</p>
             </Grid>
             <Grid item>
                 <TextField
@@ -347,7 +350,7 @@ export default function PropertyItem_scene() {
             <Grid item>
                 <Button variant="contained" size="small" onClick={() => {
                     outImage();
-                }}>输出图片</Button>
+                }}>{t("outputImages")}</Button>
             </Grid>
         </>)}
     </Grid>)

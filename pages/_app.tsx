@@ -2,6 +2,8 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import CssBaseline from '@mui/material/CssBaseline'
 import {ThemeProvider, createTheme} from '@mui/material/styles'
+import {appWithTranslation} from 'next-i18next/pages'
+import {i18nConfig} from '../src/i18nConfig'
 
 const theme = createTheme({
   palette: {
@@ -75,4 +77,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   )
 }
 
-export default MyApp
+export default appWithTranslation(MyApp, i18nConfig)

@@ -8,6 +8,7 @@ import JSZip from "jszip";
 import {EventMgr} from "./EventMgr";
 import {EventEnum} from "../events/EventEnum";
 import {SceneControls} from "./SceneControls";
+import i18next from "i18next";
 
 export class OutMgr {
 
@@ -40,7 +41,7 @@ export class OutMgr {
         if (endLine > Basic.excelImportObj.endLine) {
             endLine = Basic.excelImportObj.endLine;
             if (endLine < Basic.excelImportObj.startLine) {
-                alert("导入的excel文件数据不足");
+                alert(i18next.t("importedExcelDataNotEnough"));
                 return;
             }
         }
@@ -120,7 +121,7 @@ export class OutMgr {
             zipObj = null;
             Basic.outImageProgress.complete = true;
             EventMgr.getIns().dispatchEvent(EventEnum.changeAlertShow_outImage_progress);
-            alert("已完成共");
+            alert(i18next.t("outputComplete"));
         }
 
     }

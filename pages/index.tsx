@@ -14,6 +14,8 @@ import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import SaveIcon from '@mui/icons-material/Save';
 import ImageIcon from '@mui/icons-material/Image';
@@ -27,11 +29,19 @@ import AlertLay from '../components/AlertLay';
 import * as exceljs from "exceljs";
 import * as sheetjs from "xlsx";
 import {FontMgr} from "../src/manager/FontMgr";
+import {useTranslation} from 'next-i18next/pages';
+import {AppLocale, defaultLocale, getLocaleCookie, setLocaleCookie} from '../src/i18nConfig';
 
 const Home: NextPage = () => {
     let verStr = "0.0.4";
+    const {t, i18n} = useTranslation('common');
+    const [locale, setLocale] = useState<AppLocale>(defaultLocale);
 
     useEffect(() => {
+        let cookieLocale = getLocaleCookie();
+        setLocale(cookieLocale);
+        i18n.changeLanguage(cookieLocale);
+
         // @ts-ignore
         window.Basic = Basic;
         // @ts-ignore
@@ -82,11 +92,11 @@ const Home: NextPage = () => {
                                 sceneControls.setSave(attribute, list);
                             }
                         } else {
-                            throw new Error("json格式错误");
+                            throw new Error(t("invalidJson"));
                         }
                     } catch (e) {
                         console.log(e);
-                        alert("文件格式错误请重新选择");
+                        alert(t("invalidFileFormat"));
                     }
                 }
 
@@ -95,7 +105,7 @@ const Home: NextPage = () => {
         });
 
         Main_draw.getIns().init();
-    });
+    }, []);
 
     let createNewText = () => {
         ObjectMgr.getIns().addText();
@@ -118,7 +128,7 @@ const Home: NextPage = () => {
             dlLink.click();
             document.body.removeChild(dlLink);
         } else {
-            alert("舞台上空无一物");
+            alert(t("emptyStage"));
         }
     }
 
@@ -158,10 +168,10 @@ const Home: NextPage = () => {
                         <Button variant="contained" size="small" startIcon={<UploadFileIcon/>} onClick={() => {
                             let fileInput = document.getElementById("btn_openFile");
                             fileInput.click();
-                        }}>打开</Button>
+                        }}>{t("open")}</Button>
                         <Button variant="outlined" size="small" startIcon={<SaveIcon/>} onClick={() => {
                             saveFile();
-                        }}>保存</Button>
+                        }}>{t("save")}</Button>
                     </Box>
                     <Divider orientation="vertical" flexItem className={styles.toolbarDivider}/>
                     <Box sx={{display: 'flex', gap: 1, alignItems: 'center'}}>
@@ -170,24 +180,40 @@ const Home: NextPage = () => {
                         <Button variant="outlined" size="small" startIcon={<ImageIcon/>} onClick={() => {
                             let fileInput = document.getElementById("btn_loadImgFile");
                             fileInput.click();
-                        }}>加载图片</Button>
+                        }}>{t("loadImage")}</Button>
                         <Button variant="contained" size="small" startIcon={<TextFieldsIcon/>} onClick={() => {
                             createNewText();
-                        }}>新建文本</Button>
+                        }}>{t("newText")}</Button>
                     </Box>
+                    <Box sx={{flex: 1}}/>
+                    <ToggleButtonGroup
+                        exclusive
+                        size="small"
+                        value={locale}
+                        onChange={(event, nextLocale: string | null) => {
+                            if (nextLocale == 'zh-CN' || nextLocale == 'en') {
+                                setLocaleCookie(nextLocale);
+                                setLocale(nextLocale);
+                                i18n.changeLanguage(nextLocale);
+                            }
+                        }}
+                    >
+                        <ToggleButton value="zh-CN">{t("languageZh")}</ToggleButton>
+                        <ToggleButton value="en">{t("languageEn")}</ToggleButton>
+                    </ToggleButtonGroup>
                 </Toolbar>
             </AppBar>
 
             <Box className={styles.sidebar}>
                 <Paper elevation={6} className={styles.panel}>
                     <Typography variant="overline" className={styles.panelTitle}>
-                        属性
+                        {t("properties")}
                     </Typography>
                     <PropertyList/>
                 </Paper>
                 <Paper elevation={6} className={styles.panel}>
                     <Typography variant="overline" className={styles.panelTitle} component="div">
-                        图层
+                        {t("layers")}
                     </Typography>
                     <LayerList>
                     </LayerList>

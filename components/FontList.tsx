@@ -5,6 +5,7 @@ import {FontMgr} from "../src/manager/FontMgr";
 import {EventMgr} from "../src/manager/EventMgr";
 import {EventEnum} from "../src/events/EventEnum";
 import {Basic} from "../src/Basic";
+import {useTranslation} from "next-i18next/pages";
 
 export default class FontList extends React.Component<{
     selVal: string,
@@ -58,9 +59,11 @@ export default class FontList extends React.Component<{
 }
 
 function CustomSelect(props: Select.Root.Props<string, false>) {
+    const {t} = useTranslation('common');
+
     return (
         <Select.Root {...props}>
-            <StyledTrigger aria-label="字体">
+            <StyledTrigger aria-label={t("font")}>
                 <Select.Value />
             </StyledTrigger>
             <Select.Portal>

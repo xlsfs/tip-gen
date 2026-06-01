@@ -2,10 +2,13 @@ import { Text } from "@svgdotjs/svg.js";
 import { SceneControls } from "../manager/SceneControls";
 import { ObjStateEnum } from "./state/ObjStateEnum";
 import { _baseObj, ObjSvgNode } from "./_baseObj";
+import i18next from "i18next";
 
 export class TextObj extends _baseObj {
 
-    public static placeholder: string = "请输入文本";
+    public static get placeholder() {
+        return i18next.t("inputTextPlaceholder");
+    }
 
     public svgItem: Text;
 

@@ -1,6 +1,7 @@
 import {EventMgr} from "./manager/EventMgr";
 import {EventEnum} from "./events/EventEnum";
 import {ExcelMgr} from "./manager/ExcelMgr";
+import i18next from "i18next";
 
 export class Basic {
 
@@ -37,10 +38,10 @@ export class Basic {
         return 99999;
     }
     static get defaultSceneName () {
-        return "未命名";
+        return i18next.t("unnamed");
     }
     static get defaultOutFileName () {
-        return "未命名";
+        return i18next.t("unnamed");
     }
     static excel_fileName = "";
     static excelImportObj = {

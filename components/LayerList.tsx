@@ -20,9 +20,11 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
 import DeleteIcon from "@mui/icons-material/Delete";
+import {withTranslation} from "next-i18next/pages";
+import type {WithTranslation} from "react-i18next";
 
 // export default function LayerList(props: any) {
-export default class LayerList extends React.Component {
+class LayerList extends React.Component<WithTranslation> {
 
     state: any;
 
@@ -201,6 +203,8 @@ export default class LayerList extends React.Component {
     }
 
     render() {
+        const {t} = this.props;
+
         return (<>
             <Grid
                 container
@@ -213,7 +217,7 @@ export default class LayerList extends React.Component {
                     {<div style={{
                         pointerEvents: this.state.selectedItem.length == 0 ? "none" : "auto"
                     }}>
-                        <Tooltip title="移到最顶层">
+                        <Tooltip title={t("moveToTop")}>
                         <span>
                         <IconButton
                             size="small"
@@ -227,7 +231,7 @@ export default class LayerList extends React.Component {
                         </IconButton>
                         </span>
                         </Tooltip>
-                        <Tooltip title="上移一层">
+                        <Tooltip title={t("moveUp")}>
                         <span>
                         <IconButton
                             size="small"
@@ -240,7 +244,7 @@ export default class LayerList extends React.Component {
                         </IconButton>
                         </span>
                         </Tooltip>
-                        <Tooltip title="下移一层">
+                        <Tooltip title={t("moveDown")}>
                         <span>
                         <IconButton
                             size="small"
@@ -253,7 +257,7 @@ export default class LayerList extends React.Component {
                         </IconButton>
                         </span>
                         </Tooltip>
-                        <Tooltip title="移到最底层">
+                        <Tooltip title={t("moveToBottom")}>
                         <span>
                         <IconButton
                             size="small"
@@ -266,7 +270,7 @@ export default class LayerList extends React.Component {
                         </IconButton>
                         </span>
                         </Tooltip>
-                        <Tooltip title="删除图层">
+                        <Tooltip title={t("deleteLayer")}>
                         <span>
                         <IconButton
                             size="small"
@@ -317,3 +321,5 @@ export default class LayerList extends React.Component {
         </>);
     }
 }
+
+export default withTranslation('common')(LayerList);

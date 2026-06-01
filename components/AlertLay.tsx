@@ -7,8 +7,10 @@ import Button from "@mui/material/Button";
 import {EventMgr} from "../src/manager/EventMgr";
 import {EventEnum} from "../src/events/EventEnum";
 import {ExcelMgr} from "../src/manager/ExcelMgr";
+import {withTranslation} from "next-i18next/pages";
+import type {WithTranslation} from "react-i18next";
 
-export default class AlertLay extends React.Component {
+class AlertLay extends React.Component<WithTranslation> {
 
     state: any;
 
@@ -86,6 +88,8 @@ export default class AlertLay extends React.Component {
     }
 
     submitImportExcel (ok:boolean) {
+        const {t} = this.props;
+
         if(ok) {
             let sheet = null;
             if(Basic.excelImportObj.sheetNo != -1) {
@@ -95,17 +99,17 @@ export default class AlertLay extends React.Component {
             }
             ExcelMgr.getIns().excelJs_worksheet = sheet;
             if (!ExcelMgr.getIns().excelJs_worksheet) {
-                alert("工作表编号错误,请确认");
+                alert(t("worksheetNumberError"));
                 return;
             }
             if (Basic.excelImportObj.startLine > 0) {
             } else {
-                alert("数据起始行编号错误,请确认");
+                alert(t("startLineError"));
                 return;
             }
             if (Basic.excelImportObj.endLine > 0 && Basic.excelImportObj.endLine > Basic.excelImportObj.startLine) {
             } else {
-                alert("数据结束行编号错误,请确认");
+                alert(t("endLineError"));
                 return;
             }
             this.setAlertShow(false);
@@ -133,6 +137,8 @@ export default class AlertLay extends React.Component {
     }
 
     render() {
+        const {t} = this.props;
+
         return (<>
 
             <div className={this.state.alertShow?styles.alert_container_show:styles.alert_container_hide}>
@@ -145,11 +151,11 @@ export default class AlertLay extends React.Component {
                         spacing={1}
                         p={1}>
                         <Grid item>
-                            <p style={{margin: 0}}>确认导入数据表</p>
+                            <p style={{margin: 0}}>{t("importExcelConfirmTitle")}</p>
                             <p></p>
                         </Grid>
                         <Grid item>
-                            <p style={{margin: 0}}>工作表编号，从1开始:</p>
+                            <p style={{margin: 0}}>{t("worksheetNumberPrompt")}</p>
                         </Grid>
                         <Grid item>
                             <TextField
@@ -174,7 +180,7 @@ export default class AlertLay extends React.Component {
                             />
                         </Grid>
                         <Grid item>
-                            <p style={{margin: 0}}>数据起始行</p>
+                            <p style={{margin: 0}}>{t("startLine")}</p>
                         </Grid>
                         <Grid item>
                             <TextField
@@ -191,7 +197,7 @@ export default class AlertLay extends React.Component {
                             />
                         </Grid>
                         <Grid item>
-                            <p style={{margin: 0}}>数据结束行</p>
+                            <p style={{margin: 0}}>{t("endLine")}</p>
                         </Grid>
                         <Grid item>
                             <TextField
@@ -211,10 +217,10 @@ export default class AlertLay extends React.Component {
                         <Grid item>
                             <Button variant="contained" size="small" style={{margin:10}} onClick={() => {
                                 this.submitImportExcel(true);
-                            }}>确认导入</Button>
+                            }}>{t("confirmImport")}</Button>
                             <Button variant="contained" size="small" style={{margin:10}} onClick={() => {
                                 this.submitImportExcel(false);
-                            }}>取消</Button>
+                            }}>{t("cancel")}</Button>
                         </Grid>
                     </Grid>
 
@@ -228,7 +234,7 @@ export default class AlertLay extends React.Component {
                         spacing={1}
                         p={1}>
                         <Grid item>
-                            <p style={{margin: 0}}>图片导出中...</p>
+                            <p style={{margin: 0}}>{t("exportingImages")}</p>
                             <p></p>
                         </Grid>
                         <Grid item>
@@ -240,29 +246,29 @@ export default class AlertLay extends React.Component {
                                 <tr style={{
                                     "alignItems": "center",
                                 }}>
-                                    <th>总公共需要处理：</th>
+                                    <th>{t("totalToProcess")}</th>
                                     <td>{this.state.outImage_total}</td>
-                                    <td>条记录</td>
+                                    <td>{t("records")}</td>
                                 </tr>
                                 <tr style={{
                                     "alignItems": "center",
                                 }}>
-                                    <th>已处理：</th>
+                                    <th>{t("processed")}</th>
                                     <td>{this.state.outImage_current}</td>
-                                    <td>条记录</td>
+                                    <td>{t("records")}</td>
                                 </tr>
                                 <tr style={{
                                     "alignItems": "center",
                                 }}>
-                                    <th>剩余：</th>
+                                    <th>{t("remaining")}</th>
                                     <td>{this.state.outImage_total-this.state.outImage_current}</td>
-                                    <td>条记录待处理</td>
+                                    <td>{t("recordsPending")}</td>
                                 </tr>
                                 <tr style={{
                                     "alignItems": "center",
                                 }}>
-                                    <th>状态：</th>
-                                    <th>{this.state.outImage_complete?"完成":"处理中"}</th>
+                                    <th>{t("status")}</th>
+                                    <th>{this.state.outImage_complete?t("complete"):t("processing")}</th>
                                     <th></th>
                                 </tr>
                                 </tbody>
@@ -274,9 +280,9 @@ export default class AlertLay extends React.Component {
                                 if(this.state.outImage_complete) {
                                     this.submitOutImage(false);
                                 } else {
-                                    alert("请稍后还未完成导出！");
+                                    alert(t("waitForExport"));
                                 }
-                            }}>关闭</Button>
+                            }}>{t("close")}</Button>
                         </Grid>
                     </Grid>
                 </div>
@@ -284,3 +290,5 @@ export default class AlertLay extends React.Component {
         </>);
     }
 }
+
+export default withTranslation('common')(AlertLay);

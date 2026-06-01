@@ -3,8 +3,11 @@ import TextField from "@mui/material/TextField";
 import {PropertyTypeEnum} from "../../src/PropertyTypeEnum";
 import * as React from "react";
 import {SceneControls} from "../../src/manager/SceneControls";
+import {useTranslation} from "next-i18next/pages";
 
 export default function PropertyItem_common() {
+    const {t} = useTranslation('common');
+
     const [prop_pos_x, setProp_pos_x] = React.useState(0);
     const [prop_pos_y, setProp_pos_y] = React.useState(0);
 
@@ -84,7 +87,7 @@ export default function PropertyItem_common() {
         spacing={1}
         p={1}>
         <Grid item>
-            <p style={{margin: 0}}>位置</p>
+            <p style={{margin: 0}}>{t("position")}</p>
         </Grid>
         <Grid item>
             <TextField

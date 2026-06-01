@@ -4,8 +4,11 @@ import {PropertyTypeEnum} from "../../src/PropertyTypeEnum";
 import * as React from "react";
 import {ImageObj} from "../../src/object/ImageObj";
 import {SceneControls} from "../../src/manager/SceneControls";
+import {useTranslation} from "next-i18next/pages";
 
 export default function PropertyItem_image(props: any) {
+    const {t} = useTranslation('common');
+
     const [prop_img_width, setProp_img_width] = React.useState(0);
     const [prop_img_height, setProp_img_height] = React.useState(0);
 
@@ -63,7 +66,7 @@ export default function PropertyItem_image(props: any) {
         spacing={1}
         p={1}>
         <Grid item>
-            <p style={{margin: 0}}>图片</p>
+            <p style={{margin: 0}}>{t("image")}</p>
         </Grid>
         <Grid item>
             <TextField
@@ -75,7 +78,7 @@ export default function PropertyItem_image(props: any) {
                 slotProps={{
                     input: {
                         startAdornment: (
-                        <span style={{width: "100px"}}>Width:</span>
+                        <span style={{width: "100px"}}>{t("width")}</span>
                         )
                     }
                 }}
@@ -94,7 +97,7 @@ export default function PropertyItem_image(props: any) {
                 slotProps={{
                     input: {
                         startAdornment: (
-                        <span style={{width: "100px"}}>Height:</span>
+                        <span style={{width: "100px"}}>{t("height")}</span>
                         )
                     }
                 }}

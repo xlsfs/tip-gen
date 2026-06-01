@@ -13,6 +13,7 @@ import {TextObj} from "../../src/object/TextObj";
 import {EventMgr} from "../../src/manager/EventMgr";
 import {EventEnum} from "../../src/events/EventEnum";
 import {SceneControls} from "../../src/manager/SceneControls";
+import {useTranslation} from "next-i18next/pages";
 
 const FontList = dynamic(
     () => {
@@ -22,6 +23,8 @@ const FontList = dynamic(
 );
 
 export default function PropertyItem_text(props: any) {
+    const {t} = useTranslation('common');
+
     const [prop_txt_text, setProp_txt_text] = React.useState("");
     const [prop_txt_fontFamily, setProp_txt_fontFamily] = React.useState("SimHei");
     const [prop_txt_fontSize, setProp_txt_fontSize] = React.useState(14);
@@ -173,7 +176,7 @@ export default function PropertyItem_text(props: any) {
         spacing={1}
         p={1}>
         <Grid item>
-            <p style={{margin: 0}}>文本框</p>
+            <p style={{margin: 0}}>{t("textBox")}</p>
         </Grid>
         <Grid item>
             <TextField
@@ -185,7 +188,7 @@ export default function PropertyItem_text(props: any) {
                 slotProps={{
                     input: {
                         startAdornment: (
-                        <span style={{width: "100px"}}>Text：</span>
+                        <span style={{width: "100px"}}>{t("text")}</span>
                         )
                     }
                 }}
@@ -195,7 +198,7 @@ export default function PropertyItem_text(props: any) {
             />
         </Grid>
         <Grid item>
-            <span style={{width: "100px"}}>字体：</span>
+            <span style={{width: "100px"}}>{t("font")}</span>
             <FontList
                 selVal={prop_txt_fontFamily}
                 onChange={(val: string) => {
@@ -212,7 +215,7 @@ export default function PropertyItem_text(props: any) {
                 slotProps={{
                     input: {
                         startAdornment: (
-                        <span style={{width: "100px"}}>字号：</span>
+                        <span style={{width: "100px"}}>{t("fontSize")}</span>
                         )
                     }
                 }}
@@ -222,7 +225,7 @@ export default function PropertyItem_text(props: any) {
             />
         </Grid>
         <Grid item>
-            <span style={{width: "100px", float: 'left',}}>Color：</span>
+            <span style={{width: "100px", float: 'left',}}>{t("color")}</span>
             <div style={{
                 // padding: '5px',
                 background: '#fff',
@@ -262,7 +265,7 @@ export default function PropertyItem_text(props: any) {
         </Grid>
         <Grid item>
             <FormControl>
-                <FormLabel id="demo-radio-buttons-group-label">对齐方式：</FormLabel>
+                <FormLabel id="demo-radio-buttons-group-label">{t("alignment")}</FormLabel>
                 <RadioGroup
                     id={PropertyTypeEnum.txt_align}
                     value={prop_txt_align}
@@ -273,9 +276,9 @@ export default function PropertyItem_text(props: any) {
                         onTextHandleChange(event.target, PropertyTypeEnum.txt_align);
                     }}
                 >
-                    <FormControlLabel value="left" control={<Radio />} label="left" />
-                    <FormControlLabel value="center" control={<Radio />} label="center" />
-                    <FormControlLabel value="right" control={<Radio />} label="right" />
+                    <FormControlLabel value="left" control={<Radio />} label={t("alignLeft")} />
+                    <FormControlLabel value="center" control={<Radio />} label={t("alignCenter")} />
+                    <FormControlLabel value="right" control={<Radio />} label={t("alignRight")} />
                 </RadioGroup>
             </FormControl>
         </Grid>
