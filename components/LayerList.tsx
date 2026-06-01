@@ -14,6 +14,7 @@ import {TextObj} from '../src/object/TextObj';
 import {ImageObj} from '../src/object/ImageObj';
 import Grid from "./MuiGridCompat";
 import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -201,7 +202,6 @@ export default class LayerList extends React.Component {
 
     render() {
         return (<>
-            <span>图层</span>
             <Grid
                 container
                 direction="row"
@@ -213,7 +213,10 @@ export default class LayerList extends React.Component {
                     {<div style={{
                         pointerEvents: this.state.selectedItem.length == 0 ? "none" : "auto"
                     }}>
+                        <Tooltip title="移到最顶层">
+                        <span>
                         <IconButton
+                            size="small"
                             // color={this.state.selectedItem.length == 0?"#eeeeee":"#42a5f5"}
                             disabled={this.state.selectedItem.length == 0 || this.state.layerList.length < 2}
                             onClick={(event) => {
@@ -222,7 +225,12 @@ export default class LayerList extends React.Component {
                             }}>
                             <KeyboardDoubleArrowUpIcon/>
                         </IconButton>
+                        </span>
+                        </Tooltip>
+                        <Tooltip title="上移一层">
+                        <span>
                         <IconButton
+                            size="small"
                             disabled={this.state.selectedItem.length == 0 || this.state.layerList.length < 2}
                             onClick={(event) => {
                                 //向上一层
@@ -230,7 +238,12 @@ export default class LayerList extends React.Component {
                             }}>
                             <KeyboardArrowUpIcon/>
                         </IconButton>
+                        </span>
+                        </Tooltip>
+                        <Tooltip title="下移一层">
+                        <span>
                         <IconButton
+                            size="small"
                             disabled={this.state.selectedItem.length == 0 || this.state.layerList.length < 2}
                             onClick={(event) => {
                                 //向下一层
@@ -238,7 +251,12 @@ export default class LayerList extends React.Component {
                             }}>
                             <KeyboardArrowDownIcon/>
                         </IconButton>
+                        </span>
+                        </Tooltip>
+                        <Tooltip title="移到最底层">
+                        <span>
                         <IconButton
+                            size="small"
                             disabled={this.state.selectedItem.length == 0 || this.state.layerList.length < 2}
                             onClick={(event) => {
                                 //移动到最底层
@@ -246,7 +264,13 @@ export default class LayerList extends React.Component {
                             }}>
                             <KeyboardDoubleArrowDownIcon/>
                         </IconButton>
+                        </span>
+                        </Tooltip>
+                        <Tooltip title="删除图层">
+                        <span>
                         <IconButton
+                            size="small"
+                            color="error"
                             disabled={this.state.selectedItem.length == 0}
                             onClick={(event) => {
                                 //删除层
@@ -254,22 +278,28 @@ export default class LayerList extends React.Component {
                             }}>
                             <DeleteIcon/>
                         </IconButton>
+                        </span>
+                        </Tooltip>
                     </div>}
                 </Grid>
             </Grid>
             <List
                 sx={{
                     width: '100%',
-                    maxWidth: 360,
+                    maxWidth: 'none',
                     bgcolor: 'background.paper',
-                    border: '1px solid #aaa',
+                    borderTop: '1px solid',
+                    borderColor: 'divider',
                     position: 'relative',
                     overflow: 'auto',
                     maxHeight: "250px",
+                    px: 1,
+                    pb: 1,
                 }}
             >
                 {this.state.layerList.map((item: _baseObj, index: number, array: any[]) => (
-                    <ListItemButton style={{padding:5}}
+                    <ListItemButton
+                        sx={{borderRadius: 1, py: .75, gap: 1}}
                         key={`section-${index}`}
                         selected={this.state.selectedItem.indexOf(item) !== -1}
                         onClick={(event) => this.handleListItemClick(event, item)}

@@ -8,7 +8,16 @@ import {EventMgr} from '../src/manager/EventMgr'
 import {EventEnum} from '../src/events/EventEnum'
 import Button from '@mui/material/Button';
 import Slider from '@mui/material/Slider';
-import Grid from '../components/MuiGridCompat';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import Paper from '@mui/material/Paper';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
+import SaveIcon from '@mui/icons-material/Save';
+import ImageIcon from '@mui/icons-material/Image';
+import TextFieldsIcon from '@mui/icons-material/TextFields';
 import {ObjectMgr} from '../src/manager/ObjectMgr'
 import LayerList from '../components/LayerList'
 import PropertyList from '../components/PropertyList'
@@ -132,81 +141,62 @@ const Home: NextPage = () => {
             <div className={styles.div_svgContainer} id="svgContainer">
 
             </div>
-            <div className={styles.container_top}>
-                <Grid
-                    container
-                    direction="row"
-                    justifyContent="flex-start"
-                    alignItems="flex-start"
-                    spacing={1}
-                    p={.5}
-                >
-                    <Grid item>
+            <AppBar
+                position="fixed"
+                color="inherit"
+                elevation={0}
+                className={styles.appBar}
+            >
+                <Toolbar variant="dense" className={styles.toolbar}>
+                    <Typography variant="subtitle1" component="h1" className={styles.brand}>
+                        tip gen
+                    </Typography>
+                    <Divider orientation="vertical" flexItem className={styles.toolbarDivider}/>
+                    <Box sx={{display: 'flex', gap: 1, alignItems: 'center'}}>
                         <input type="file" id="btn_openFile" style={{display: "none"}}
                                accept=".tgen"/>
-                        <Button variant="contained" size="small" onClick={() => {
+                        <Button variant="contained" size="small" startIcon={<UploadFileIcon/>} onClick={() => {
                             let fileInput = document.getElementById("btn_openFile");
                             fileInput.click();
                         }}>打开</Button>
-                    </Grid>
-                    <Grid item>
-                        <Button variant="contained" size="small" onClick={() => {
+                        <Button variant="outlined" size="small" startIcon={<SaveIcon/>} onClick={() => {
                             saveFile();
                         }}>保存</Button>
-                    </Grid>
-                    <Grid item>
-                    </Grid>
-                    <Grid item>
-                    </Grid>
-                    <Grid item>
-                    </Grid>
-
-
-                    <Grid item>
+                    </Box>
+                    <Divider orientation="vertical" flexItem className={styles.toolbarDivider}/>
+                    <Box sx={{display: 'flex', gap: 1, alignItems: 'center'}}>
                         <input type="file" id="btn_loadImgFile" style={{display: "none"}}
                                accept="image/png, image/jpeg"/>
-                        <Button variant="contained" size="small" onClick={() => {
+                        <Button variant="outlined" size="small" startIcon={<ImageIcon/>} onClick={() => {
                             let fileInput = document.getElementById("btn_loadImgFile");
                             fileInput.click();
                         }}>加载图片</Button>
-                    </Grid>
-                    <Grid item>
-                        <Button variant="contained" size="small" onClick={() => {
+                        <Button variant="contained" size="small" startIcon={<TextFieldsIcon/>} onClick={() => {
                             createNewText();
                         }}>新建文本</Button>
-                    </Grid>
-                </Grid>
-            </div>
+                    </Box>
+                </Toolbar>
+            </AppBar>
 
-            <div className={styles.container_right_top}>
-                <div>
-                    <span>属性</span>
+            <Box className={styles.sidebar}>
+                <Paper elevation={6} className={styles.panel}>
+                    <Typography variant="overline" className={styles.panelTitle}>
+                        属性
+                    </Typography>
                     <PropertyList/>
-                </div>
-            </div>
-            <div className={styles.container_right_bottom}>
-                <div>
+                </Paper>
+                <Paper elevation={6} className={styles.panel}>
+                    <Typography variant="overline" className={styles.panelTitle} component="div">
+                        图层
+                    </Typography>
                     <LayerList>
                     </LayerList>
-                </div>
-                <Grid
-                    container
-                    direction="column"
-                    justifyContent="flex-start"
-                    alignItems="flex-start"
-                    spacing={1}
-                    p={1}>
-                    <Grid item>
+                </Paper>
+            </Box>
 
-                    </Grid>
-                </Grid>
-            </div>
-
-            <div className={styles.container_left_bottom}>
-                <div>
-                    <span>v{verStr}</span>
-                </div>
-            </div>
+            <Paper elevation={3} className={styles.versionBadge}>
+                v{verStr}
+            </Paper>
 
             {/*<div className={styles.container_bottom}>*/}
             {/*    <Slider*/}

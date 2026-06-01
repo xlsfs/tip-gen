@@ -55,13 +55,16 @@ export default class PropertyList extends React.Component {
         return (<>
             <List
                 sx={{
+                    flex: '1 1 auto',
+                    minHeight: 0,
                     width: '100%',
-                    maxWidth: 360,
+                    maxWidth: 'none',
                     bgcolor: 'background.paper',
-                    border: '1px solid #aaa',
+                    border: 0,
                     position: 'relative',
                     overflow: 'auto',
-                    maxHeight: "420px",
+                    px: 1,
+                    pb: 1,
                 }}
             >
             {//未选择元素
