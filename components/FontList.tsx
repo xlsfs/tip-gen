@@ -1,6 +1,6 @@
 import * as React from "react";
 import {Select} from '@base-ui/react/select';
-import {styled} from '@mui/system';
+import {styled} from '@mui/material/styles';
 import {FontMgr} from "../src/manager/FontMgr";
 import {EventMgr} from "../src/manager/EventMgr";
 import {EventEnum} from "../src/events/EventEnum";
