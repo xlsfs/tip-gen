@@ -8,7 +8,7 @@ import {EventMgr} from '../src/manager/EventMgr'
 import {EventEnum} from '../src/events/EventEnum'
 import Button from '@mui/material/Button';
 import Slider from '@mui/material/Slider';
-import Grid from '@mui/material/Grid';
+import Grid from '../components/MuiGridCompat';
 import {ObjectMgr} from '../src/manager/ObjectMgr'
 import LayerList from '../components/LayerList'
 import PropertyList from '../components/PropertyList'

@@ -1,4 +1,4 @@
-import Grid from "@mui/material/Grid";
+import Grid from "../MuiGridCompat";
 import TextField from "@mui/material/TextField";
 import {PropertyTypeEnum} from "../../src/PropertyTypeEnum";
 import * as React from "react";
@@ -93,10 +93,12 @@ export default function PropertyItem_common() {
                 hiddenLabel
                 size="small"
                 variant="standard"
-                InputProps={{
-                    startAdornment: (
+                slotProps={{
+                    input: {
+                        startAdornment: (
                         <span style={{width: "100px"}}>X:</span>
-                    )
+                        )
+                    }
                 }}
                 onChange={(event) => {
                     onTextHandleChange(event.target, PropertyTypeEnum.pos_x);
@@ -110,10 +112,12 @@ export default function PropertyItem_common() {
                 hiddenLabel
                 size="small"
                 variant="standard"
-                InputProps={{
-                    startAdornment: (
+                slotProps={{
+                    input: {
+                        startAdornment: (
                         <span style={{width: "100px"}}>Y:</span>
-                    )
+                        )
+                    }
                 }}
                 onChange={(event) => {
                     onTextHandleChange(event.target, PropertyTypeEnum.pos_y);
@@ -131,10 +135,12 @@ export default function PropertyItem_common() {
                 hiddenLabel
                 size="small"
                 variant="standard"
-                InputProps={{
-                    startAdornment: (
+                slotProps={{
+                    input: {
+                        startAdornment: (
                         <span style={{width: "100px"}}>旋转:</span>
-                    )
+                        )
+                    }
                 }}
                 onChange={(event) => {
                     onTextHandleChange(event.target, PropertyTypeEnum.rotate_x);

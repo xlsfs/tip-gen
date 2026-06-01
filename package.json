@@ -9,11 +9,12 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@base-ui/react": "1.5.0",
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
-    "@mui/base": "5.0.0-beta.70",
-    "@mui/icons-material": "5.18.0",
-    "@mui/material": "5.18.0",
+    "@mui/icons-material": "9.0.1",
+    "@mui/material": "9.0.1",
+    "@mui/material-pigment-css": "9.0.1",
     "@svgdotjs/svg.js": "3.2.5",
     "canvg": "4.0.3",
     "exceljs": "4.4.0",

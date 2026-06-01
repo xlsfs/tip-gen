@@ -1,8 +1,6 @@
 import * as React from "react";
-import {Select, SelectProps, selectClasses} from '@mui/base/Select';
-import {Option, optionClasses} from '@mui/base/Option';
+import {Select} from '@base-ui/react/select';
 import {styled} from '@mui/system';
-import {Popper} from '@mui/base/Popper';
 import {FontMgr} from "../src/manager/FontMgr";
 import {EventMgr} from "../src/manager/EventMgr";
 import {EventEnum} from "../src/events/EventEnum";
@@ -31,42 +29,54 @@ export default class FontList extends React.Component<{
     }
 
     render() {
+        let items = this.state.prop_txt_font.map((c: any) => ({
+            label: c.cn,
+            value: c.font,
+        }));
+
         return (
             <CustomSelect
+                items={items}
                 value={this.state.selVal}
-                onChange={(_event, val) => {
+                onValueChange={(val) => {
                     this.setState({
                         selVal: val
                     });
-                    this.props.onChange(val as any);
-                }}>
+                    this.props.onChange(val);
+                }}
+            >
                 {this.state.prop_txt_font.map((c: any) => (
-                    <StyledOption key={c.font} value={c.font}>
-                        <span style={{
+                    <StyledItem key={c.font} value={c.font}>
+                        <Select.ItemText style={{
                             fontFamily: c.font
-                        }}>{c.cn}</span>
-                    </StyledOption>
+                        }}>{c.cn}</Select.ItemText>
+                    </StyledItem>
                 ))}
             </CustomSelect>
         )
     }
 }
 
-const CustomSelect = React.forwardRef(function CustomSelect(
-    props: SelectProps<string, false>,
-    ref: React.ForwardedRef<any>,
-) {
-    const slots: SelectProps<string, false>['slots'] = {
-        root: StyledButton,
-        listbox: StyledListbox,
-        popup: StyledPopper,
-        ...props.slots,
-    };
+function CustomSelect(props: Select.Root.Props<string, false>) {
+    return (
+        <Select.Root {...props}>
+            <StyledTrigger aria-label="字体">
+                <Select.Value />
+            </StyledTrigger>
+            <Select.Portal>
+                <StyledPositioner sideOffset={0} alignItemWithTrigger={false}>
+                    <StyledPopup>
+                        <StyledList>
+                            {props.children}
+                        </StyledList>
+                    </StyledPopup>
+                </StyledPositioner>
+            </Select.Portal>
+        </Select.Root>
+    );
+}
 
-    return <Select {...props} ref={ref} slots={slots}/>;
-});
-
-const StyledButton = styled('button')`
+const StyledTrigger = styled(Select.Trigger)`
   font-family: IBM Plex Sans, sans-serif;
   font-size: 0.875rem;
   box-sizing: border-box;
@@ -81,11 +91,11 @@ const StyledButton = styled('button')`
   line-height: 1.5;
   color: #000;
 
-  &.${selectClasses.focusVisible} {
+  &:focus-visible {
     outline: 4px solid rgba(100, 100, 100, 0.3);
   }
 
-  &.${selectClasses.expanded} {
+  &[data-popup-open] {
     //border-radius: 0.75em 0.75em 0 0;
 
     &::after {
@@ -103,7 +113,15 @@ const StyledButton = styled('button')`
   }
 `;
 
-const StyledListbox = styled('ul')`
+const StyledPositioner = styled(Select.Positioner)`
+  z-index: 1;
+`;
+
+const StyledPopup = styled(Select.Popup)`
+  background-color: #fff;
+`;
+
+const StyledList = styled(Select.List)`
   font-family: IBM Plex Sans, sans-serif;
   font-size: 0.875rem;
   box-sizing: border-box;
@@ -118,7 +136,7 @@ const StyledListbox = styled('ul')`
   overflow: auto;
 `;
 
-const StyledOption = styled(Option)`
+const StyledItem = styled(Select.Item)`
   list-style: none;
   padding: 4px 10px;
   margin: 0;
@@ -129,33 +147,29 @@ const StyledOption = styled(Option)`
     border-bottom: none;
   }
 
-  &.${optionClasses.disabled} {
+  &[data-disabled] {
     color: #888;
   }
 
-  &.${optionClasses.selected} {
+  &[data-selected] {
     background-color: rgba(25, 118, 210, 0.08);
   }
 
-  &.${optionClasses.highlighted} {
+  &[data-highlighted] {
     background-color: #16d;
     color: #fff;
   }
 
-  &.${optionClasses.highlighted}.${optionClasses.selected} {
+  &[data-highlighted][data-selected] {
     background-color: #05e;
     color: #fff;
   }
 
-  &:hover:not(.${optionClasses.disabled}) {
+  &:hover:not([data-disabled]) {
     background-color: #39e;
   }
 
   & img {
     margin-right: 10px;
   }
-`;
-
-const StyledPopper = styled(Popper)`
-  z-index: 1;
 `;

@@ -12,7 +12,7 @@ import {Basic} from '../src/Basic';
 import {SceneControls} from '../src/manager/SceneControls';
 import {TextObj} from '../src/object/TextObj';
 import {ImageObj} from '../src/object/ImageObj';
-import Grid from "@mui/material/Grid";
+import Grid from "./MuiGridCompat";
 import IconButton from "@mui/material/IconButton";
 import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";

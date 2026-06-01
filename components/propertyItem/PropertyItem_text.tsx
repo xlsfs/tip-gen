@@ -1,4 +1,4 @@
-import Grid from "@mui/material/Grid";
+import Grid from "../MuiGridCompat";
 import TextField from "@mui/material/TextField";
 import {PropertyTypeEnum} from "../../src/PropertyTypeEnum";
 import {ColorResult, RGBColor, SketchPicker} from "react-color";
@@ -182,10 +182,12 @@ export default function PropertyItem_text(props: any) {
                 hiddenLabel
                 size="small"
                 variant="standard"
-                InputProps={{
-                    startAdornment: (
+                slotProps={{
+                    input: {
+                        startAdornment: (
                         <span style={{width: "100px"}}>Text：</span>
-                    )
+                        )
+                    }
                 }}
                 onChange={(event) => {
                     onTextHandleChange(event.target, PropertyTypeEnum.txt_text);
@@ -207,10 +209,12 @@ export default function PropertyItem_text(props: any) {
                 hiddenLabel
                 size="small"
                 variant="standard"
-                InputProps={{
-                    startAdornment: (
+                slotProps={{
+                    input: {
+                        startAdornment: (
                         <span style={{width: "100px"}}>字号：</span>
-                    )
+                        )
+                    }
                 }}
                 onChange={(event) => {
                     onTextHandleChange(event.target, PropertyTypeEnum.txt_size);

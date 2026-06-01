@@ -1,4 +1,4 @@
-import Grid from "@mui/material/Grid";
+import Grid from "../MuiGridCompat";
 import TextField from "@mui/material/TextField";
 import {PropertyTypeEnum} from "../../src/PropertyTypeEnum";
 import Button from "@mui/material/Button";
@@ -204,10 +204,12 @@ export default function PropertyItem_scene() {
                 hiddenLabel
                 size="small"
                 variant="standard"
-                InputProps={{
-                    startAdornment: (
+                slotProps={{
+                    input: {
+                        startAdornment: (
                         <span style={{width: "100px"}}>名字:</span>
-                    )
+                        )
+                    }
                 }}
                 onChange={(event) => {
                     onSceneTextHandleChange(event.target, PropertyTypeEnum.scene_name);
@@ -224,10 +226,12 @@ export default function PropertyItem_scene() {
                 hiddenLabel
                 size="small"
                 variant="standard"
-                InputProps={{
-                    startAdornment: (
+                slotProps={{
+                    input: {
+                        startAdornment: (
                         <span style={{width: "100px"}}>宽:</span>
-                    )
+                        )
+                    }
                 }}
                 onChange={(event) => {
                     onSceneTextHandleChange(event.target, PropertyTypeEnum.scene_width);
@@ -241,10 +245,12 @@ export default function PropertyItem_scene() {
                 hiddenLabel
                 size="small"
                 variant="standard"
-                InputProps={{
-                    startAdornment: (
+                slotProps={{
+                    input: {
+                        startAdornment: (
                         <span style={{width: "100px"}}>高:</span>
-                    )
+                        )
+                    }
                 }}
                 onChange={(event) => {
                     onSceneTextHandleChange(event.target, PropertyTypeEnum.scene_height);

@@ -1,4 +1,4 @@
-import Grid from "@mui/material/Grid";
+import Grid from "../MuiGridCompat";
 import TextField from "@mui/material/TextField";
 import {PropertyTypeEnum} from "../../src/PropertyTypeEnum";
 import * as React from "react";
@@ -72,10 +72,12 @@ export default function PropertyItem_image(props: any) {
                 hiddenLabel
                 size="small"
                 variant="standard"
-                InputProps={{
-                    startAdornment: (
+                slotProps={{
+                    input: {
+                        startAdornment: (
                         <span style={{width: "100px"}}>Width:</span>
-                    )
+                        )
+                    }
                 }}
                 onChange={(event) => {
                     onTextHandleChange(event.target, PropertyTypeEnum.img_width);
@@ -89,10 +91,12 @@ export default function PropertyItem_image(props: any) {
                 hiddenLabel
                 size="small"
                 variant="standard"
-                InputProps={{
-                    startAdornment: (
+                slotProps={{
+                    input: {
+                        startAdornment: (
                         <span style={{width: "100px"}}>Height:</span>
-                    )
+                        )
+                    }
                 }}
                 onChange={(event) => {
                     onTextHandleChange(event.target, PropertyTypeEnum.img_height);

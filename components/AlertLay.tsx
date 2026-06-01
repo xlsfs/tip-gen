@@ -1,6 +1,6 @@
 import * as React from "react";
 import styles from "../styles/Home.module.css";
-import Grid from "@mui/material/Grid";
+import Grid from "./MuiGridCompat";
 import TextField from "@mui/material/TextField";
 import {Basic} from "../src/Basic";
 import Button from "@mui/material/Button";
