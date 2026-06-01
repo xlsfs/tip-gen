@@ -1,7 +1,7 @@
 import { Text } from "@svgdotjs/svg.js";
 import { SceneControls } from "../manager/SceneControls";
 import { ObjStateEnum } from "./state/ObjStateEnum";
-import { _baseObj } from "./_baseObj";
+import { _baseObj, ObjSvgNode } from "./_baseObj";
 
 export class TextObj extends _baseObj {
 
@@ -17,9 +17,10 @@ export class TextObj extends _baseObj {
         // .attr({'pointer-events':'none',"dominant-baseline":'central'});
         this.svgItem.attr({ "dominant-baseline": 'hanging' });
         this.svgItem.dom = "hanging ";
-        this.svgItem.node["main"] = this;
-        this.svgItem.node["isBaseObj"] = true;
-        this.svgItem.node["isTextObj"] = true;
+        const textNode = this.svgItem.node as ObjSvgNode<SVGTextElement>;
+        textNode.main = this;
+        textNode.isBaseObj = true;
+        textNode.isTextObj = true;
         this.svgItem.fill("rgba(0,0,0,1)");
         this.svgItem.font({
             family: 'SimHei', size: 14

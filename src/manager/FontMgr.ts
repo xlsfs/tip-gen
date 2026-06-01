@@ -1,5 +1,8 @@
 import {EventDispatcher} from "./EventDispatcher";
 
+type FontInfo = { ch: string; en: string };
+type FontGroupMap = Record<string, FontInfo[]>;
+
 export class FontMgr {
     private static _instance:FontMgr = null;
     public static getIns ():FontMgr {
@@ -8,7 +11,7 @@ export class FontMgr {
         }
         return FontMgr._instance;
     }
-    dataFont = {
+    dataFont: FontGroupMap = {
         windows: [{
             ch: '宋体',
             en: 'SimSun'
@@ -382,10 +385,10 @@ export class FontMgr {
 
         let result: {font:string, en:string, cn:string}[] = [];
         let i = 0;
-        let checkObj = {};
+        let checkObj: Record<string, true> = {};
         for(let key in this.dataFont) {
             let arrFont = this.dataFont[key];
-            arrFont.forEach((obj:any) => {
+            arrFont.forEach((obj: FontInfo) => {
                 let fontFamily = obj.en;
                 if(!checkObj[fontFamily]) {
                     checkObj[fontFamily] = true;
@@ -406,8 +409,11 @@ export class FontMgr {
     init() {
         // 系统默认字体
         var rootFontFamily;
-        if (document.documentElement["currentStyle"]) {
-            rootFontFamily = document.documentElement["currentStyle"].fontFamily;
+        var documentElement = document.documentElement as HTMLElement & {
+            currentStyle?: CSSStyleDeclaration
+        };
+        if (documentElement.currentStyle) {
+            rootFontFamily = documentElement.currentStyle.fontFamily;
         } else {
             rootFontFamily = window.getComputedStyle(document.documentElement).fontFamily;
         }

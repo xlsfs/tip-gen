@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "jsx": "preserve",
     "incremental": true,
@@ -18,9 +18,7 @@
     "allowUnusedLabels": false,
     "allowUnreachableCode": false,
     
-    "downlevelIteration": true,
     "noImplicitAny": true,
-    "suppressImplicitAnyIndexErrors":true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,

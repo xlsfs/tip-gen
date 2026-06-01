@@ -1,11 +1,8 @@
 import * as React from "react";
-import SelectUnstyled, {
-    SelectUnstyledProps,
-    selectUnstyledClasses,
-} from '@mui/base/SelectUnstyled';
-import OptionUnstyled, {optionUnstyledClasses} from '@mui/base/OptionUnstyled';
+import {Select, SelectProps, selectClasses} from '@mui/base/Select';
+import {Option, optionClasses} from '@mui/base/Option';
 import {styled} from '@mui/system';
-import {PopperUnstyled} from '@mui/base';
+import {Popper} from '@mui/base/Popper';
 import {FontMgr} from "../src/manager/FontMgr";
 import {EventMgr} from "../src/manager/EventMgr";
 import {EventEnum} from "../src/events/EventEnum";
@@ -37,7 +34,7 @@ export default class FontList extends React.Component<{
         return (
             <CustomSelect
                 value={this.state.selVal}
-                onChange={(val) => {
+                onChange={(_event, val) => {
                     this.setState({
                         selVal: val
                     });
@@ -56,17 +53,17 @@ export default class FontList extends React.Component<{
 }
 
 const CustomSelect = React.forwardRef(function CustomSelect(
-    props: SelectUnstyledProps<number>,
+    props: SelectProps<string, false>,
     ref: React.ForwardedRef<any>,
 ) {
-    const components: SelectUnstyledProps<number>['components'] = {
-        Root: StyledButton,
-        Listbox: StyledListbox,
-        Popper: StyledPopper,
-        ...props.components,
+    const slots: SelectProps<string, false>['slots'] = {
+        root: StyledButton,
+        listbox: StyledListbox,
+        popup: StyledPopper,
+        ...props.slots,
     };
 
-    return <SelectUnstyled {...props} ref={ref} components={components}/>;
+    return <Select {...props} ref={ref} slots={slots}/>;
 });
 
 const StyledButton = styled('button')`
@@ -84,11 +81,11 @@ const StyledButton = styled('button')`
   line-height: 1.5;
   color: #000;
 
-  &.${selectUnstyledClasses.focusVisible} {
+  &.${selectClasses.focusVisible} {
     outline: 4px solid rgba(100, 100, 100, 0.3);
   }
 
-  &.${selectUnstyledClasses.expanded} {
+  &.${selectClasses.expanded} {
     //border-radius: 0.75em 0.75em 0 0;
 
     &::after {
@@ -121,7 +118,7 @@ const StyledListbox = styled('ul')`
   overflow: auto;
 `;
 
-const StyledOption = styled(OptionUnstyled)`
+const StyledOption = styled(Option)`
   list-style: none;
   padding: 4px 10px;
   margin: 0;
@@ -132,25 +129,25 @@ const StyledOption = styled(OptionUnstyled)`
     border-bottom: none;
   }
 
-  &.${optionUnstyledClasses.disabled} {
+  &.${optionClasses.disabled} {
     color: #888;
   }
 
-  &.${optionUnstyledClasses.selected} {
+  &.${optionClasses.selected} {
     background-color: rgba(25, 118, 210, 0.08);
   }
 
-  &.${optionUnstyledClasses.highlighted} {
+  &.${optionClasses.highlighted} {
     background-color: #16d;
     color: #fff;
   }
 
-  &.${optionUnstyledClasses.highlighted}.${optionUnstyledClasses.selected} {
+  &.${optionClasses.highlighted}.${optionClasses.selected} {
     background-color: #05e;
     color: #fff;
   }
 
-  &:hover:not(.${optionUnstyledClasses.disabled}) {
+  &:hover:not(.${optionClasses.disabled}) {
     background-color: #39e;
   }
 
@@ -159,6 +156,6 @@ const StyledOption = styled(OptionUnstyled)`
   }
 `;
 
-const StyledPopper = styled(PopperUnstyled)`
+const StyledPopper = styled(Popper)`
   z-index: 1;
 `;

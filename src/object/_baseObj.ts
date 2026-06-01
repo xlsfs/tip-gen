@@ -1,6 +1,13 @@
 import { Element } from "@svgdotjs/svg.js";
 import { ObjStateEnum } from "./state/ObjStateEnum";
 
+export type ObjSvgNode<T extends SVGElement = SVGElement> = T & {
+    main?: _baseObj;
+    isBaseObj?: boolean;
+    isTextObj?: boolean;
+    isImageObj?: boolean;
+};
+
 export class _baseObj  {
 
     protected state = ObjStateEnum.waitLoad;

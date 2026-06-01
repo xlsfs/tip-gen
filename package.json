@@ -5,29 +5,31 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
-    "@emotion/react": "^11.7.1",
-    "@emotion/styled": "^11.6.0",
-    "@mui/icons-material": "^5.3.1",
-    "@mui/material": "^5.4.0",
-    "@svgdotjs/svg.js": "^3.1.2",
-    "canvg": "^3.0.10",
-    "exceljs": "^4.3.0",
-    "jszip": "^3.7.1",
-    "next": "12.0.9",
-    "react": "17.0.2",
+    "@emotion/react": "11.14.0",
+    "@emotion/styled": "11.14.1",
+    "@mui/base": "5.0.0-beta.70",
+    "@mui/icons-material": "5.18.0",
+    "@mui/material": "5.18.0",
+    "@svgdotjs/svg.js": "3.2.5",
+    "canvg": "4.0.3",
+    "exceljs": "4.4.0",
+    "jszip": "3.10.1",
+    "next": "15.5.18",
+    "react": "18.3.1",
     "react-color": "^2.19.3",
-    "react-dom": "17.0.2",
-    "xlsx": "^0.18.2"
+    "react-dom": "18.3.1",
+    "xlsx": "0.18.5"
   },
   "devDependencies": {
-    "@types/node": "17.0.13",
-    "@types/react": "17.0.38",
-    "@types/react-color": "^3.0.6",
-    "eslint": "8.8.0",
-    "eslint-config-next": "12.0.9",
-    "typescript": "4.5.5"
+    "@types/node": "25.9.1",
+    "@types/react": "18.3.29",
+    "@types/react-color": "3.0.13",
+    "@types/react-dom": "18.3.7",
+    "eslint": "9.39.4",
+    "eslint-config-next": "15.5.18",
+    "typescript": "6.0.3"
   }
 }

@@ -183,8 +183,8 @@ export class ObjectMgr {
                 out += item.val;
             } else if (item.type == "placeholder") {
                 let val = row.getCell(item.val).value;
-                if(!!val["result"]){
-                    val = val["result"];
+                if (val && typeof val == "object" && "result" in val) {
+                    val = val.result;
                 }
                 if (item.isNum) {
                     let fix = item.fixed;

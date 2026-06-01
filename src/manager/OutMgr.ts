@@ -1,6 +1,6 @@
 import * as exceljs from "exceljs";
 import {Basic} from "../Basic";
-import Canvg from "canvg";
+import {Canvg} from "canvg";
 import {ObjectMgr} from "./ObjectMgr";
 import {ExcelMgr} from "./ExcelMgr";
 import {Svg} from "@svgdotjs/svg.js";
@@ -124,7 +124,7 @@ export class OutMgr {
         }
 
     }
-    static _aElement_ = document.createElement('a');
+    static _aElement_: HTMLAnchorElement = null;
 
     static async outImageLogic_png(viewCopy: SVGSVGElement, outFileNameData: any, row: exceljs.Row) {
         let canvas = Basic.outCanvas;
@@ -186,6 +186,9 @@ export class OutMgr {
 
     static downloadURL (url:string, fileName:string, mimeType:string) {
         console.log("downloadURL");
+        if (!OutMgr._aElement_) {
+            OutMgr._aElement_ = document.createElement('a');
+        }
         let dlLink = OutMgr._aElement_;
 
         dlLink.download = fileName;

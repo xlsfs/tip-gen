@@ -1,7 +1,7 @@
 import {Svg, Image, SVG, namespaces} from "@svgdotjs/svg.js";
 import {SceneControls} from "../manager/SceneControls";
 import {ObjStateEnum} from "./state/ObjStateEnum";
-import {_baseObj} from "./_baseObj";
+import {_baseObj, ObjSvgNode} from "./_baseObj";
 
 export class ImageObj extends _baseObj {
 
@@ -19,14 +19,16 @@ export class ImageObj extends _baseObj {
         super("image");
         this.svgItem = SVG();
 
-        this.svgItem.node["main"] = this;
-        this.svgItem.node["isBaseObj"] = true;
-        this.svgItem.node["isImageObj"] = true;
+        const svgNode = this.svgItem.node as ObjSvgNode<SVGSVGElement>;
+        svgNode.main = this;
+        svgNode.isBaseObj = true;
+        svgNode.isImageObj = true;
         this.svgItem.attr('preserveAspectRatio', 'none');
         this.image = this.svgItem.image();
-        this.image.node["main"] = this;
-        this.image.node["isBaseObj"] = true;
-        this.image.node["isImageObj"] = true;
+        const imageNode = this.image.node as ObjSvgNode<SVGImageElement>;
+        imageNode.main = this;
+        imageNode.isBaseObj = true;
+        imageNode.isImageObj = true;
         let sceneControls = SceneControls.getIns();
         sceneControls.view.add(this.svgItem);
         this.isImageObj = true;

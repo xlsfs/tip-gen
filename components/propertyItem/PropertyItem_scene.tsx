@@ -8,7 +8,6 @@ import * as React from "react";
 import {SceneControls} from "../../src/manager/SceneControls";
 import {ObjectMgr} from "../../src/manager/ObjectMgr";
 import * as exceljs from "exceljs";
-import Canvg from "canvg";
 import {OutMgr} from "../../src/manager/OutMgr";
 import {EventMgr} from "../../src/manager/EventMgr";
 import {EventEnum} from "../../src/events/EventEnum";
