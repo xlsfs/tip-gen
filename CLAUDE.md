@@ -9,15 +9,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 命令
 
 ```bash
-npm run dev      # 开发服务器
-npm run build    # 生产构建
-npm run start    # 启动生产服务
-npm run lint     # ESLint 检查
+pnpm dev      # 开发服务器
+pnpm build    # 生产构建
+pnpm start    # 启动生产服务
+pnpm lint     # ESLint 检查
 ```
 
 ## 技术栈
 
-Next.js 12.0.9, React 17, MUI 5, @svgdotjs/svg.js (SVG 画布), canvg (SVG→Canvas→PNG), ExcelJS + SheetJS (Excel 解析), JSZip (打包)
+Next.js 16, React 19, MUI 5, @svgdotjs/svg.js (SVG 画布), canvg (SVG→Canvas→PNG), ExcelJS + SheetJS (Excel 解析), JSZip (打包)
 
 ## 架构
 
@@ -70,18 +70,20 @@ Next.js 12.0.9, React 17, MUI 5, @svgdotjs/svg.js (SVG 画布), canvg (SVG→Can
 ### 开发命令
 
 ```bash
-npm install      # 首次安装依赖
-npm run dev      # 启动本地开发服务器
-npm run build    # 生产构建
-npm run start    # 启动生产服务
-npm run lint     # Next.js ESLint 检查
+pnpm install      # 首次安装依赖
+pnpm dev          # 启动本地开发服务器
+pnpm build        # 生产构建
+pnpm start        # 启动生产服务
+pnpm lint         # ESLint 检查
 ```
 
-提交前至少运行 `npm run lint` 和 `npm run build`。
+包管理原则：本项目统一使用 pnpm。新增、升级、删除依赖必须使用 `pnpm add` / `pnpm remove`，提交 `pnpm-lock.yaml`，不要生成或提交 `package-lock.json`、`yarn.lock`。
+
+提交前至少运行 `pnpm lint` 和 `pnpm build`。
 
 ### 编码风格
 
-- 使用 TypeScript、React 17、MUI 5，保持邻近代码风格。
+- 使用 TypeScript、React 19、MUI 5，保持邻近代码风格。
 - TS/TSX 使用 2 空格缩进。
 - 命名沿用现有模式：管理器用 `*Mgr`，场景对象用 `*Obj`，事件名集中在 `EventEnum`。
 - 变更必须小而直接，不顺手重构无关模块。
@@ -94,8 +96,8 @@ npm run lint     # Next.js ESLint 检查
 没有自动测试覆盖时，需要手动验证受影响的浏览器流程，并运行：
 
 ```bash
-npm run lint
-npm run build
+pnpm lint
+pnpm build
 ```
 
 ### 提交与 PR

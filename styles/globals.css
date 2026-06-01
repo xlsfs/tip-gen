@@ -1,5 +1,5 @@
-@import url('/RobotoFont.css');
-@import url('/RobotoIcon.css');
+@import url('./RobotoFont.css');
+@import url('./RobotoIcon.css');
 
 html,
 body {

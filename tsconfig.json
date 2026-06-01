@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
@@ -9,15 +13,13 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "strictPropertyInitialization": false,
-    
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "allowUnusedLabels": false,
     "allowUnreachableCode": false,
-    
     "noImplicitAny": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
@@ -31,6 +33,12 @@
     "pretty": true,
     "strictNullChecks": false
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
